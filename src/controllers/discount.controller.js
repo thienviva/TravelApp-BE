@@ -1,5 +1,5 @@
 const controller = require('./controller');
-const DiscountServices = require('../services/Discount.service');
+const DiscountServices = require('../services/discount.service');
 const userServices = require('../services/user.services');
 const { defaultDiscounts } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
