@@ -27,7 +27,7 @@
 Icon
 
 # Firebase
-# serviceAccountKey.json
+serviceAccountKey.json
 
 # Thumbnails
 ._*
@@ -121,7 +121,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-# .env
+.env
 .env.test
 .env.production
 
