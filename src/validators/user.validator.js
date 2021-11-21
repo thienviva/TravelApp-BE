@@ -20,6 +20,18 @@ const schemas = {
 		password: joi.string().required(),
 		otp:joi.string().required()
 	}),
+	editProfile: joi.object().keys({
+		name: joi.string(),
+		address:joi.string(),
+		phone:joi.string(),
+	}),
+	updateAvatar:joi.object().keys({
+		avatar:joi.string(),
+	}),
+	verifyUser:joi.object().keys({
+		email: joi.string().required(),
+		otp:joi.string().required()
+	}),
 };
 module.exports = schemas;
 

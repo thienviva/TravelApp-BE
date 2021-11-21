@@ -14,6 +14,7 @@ router.get('/getRoomOfEnterprise', Controller.getRoomOfEnterpriseAsync)
 router.post('/createHotelRoom',jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateHotelRoom.createHotelRoom), Controller.createHotelRoomAsync)
 router.put('/updateHotelRoom', jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateHotelRoomAsync)
 router.delete('/deleteHotelRoom',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteHotelRoomAsync)
+router.delete('/deleteForceHotelRoom',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceHotelRoomAsync)
 
 
 module.exports = router

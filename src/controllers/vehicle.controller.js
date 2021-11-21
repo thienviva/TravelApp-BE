@@ -166,3 +166,30 @@ exports.deleteVehicleAsync = async (req, res, next) => {
     }
 
 }
+
+
+exports.deleteForceVehicleAsync = async (req, res, next) => {
+    try {
+        const resServices = await vehicleServices.deleteForceVehicleAsync(req.query.id);
+        if (resServices.success) {
+
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    }
+    catch (err) {
+        console.log(err);
+        return controller.sendError(res);
+    }
+
+}

@@ -25,6 +25,7 @@ router.get('/getAllEnterprise', Controller.getAllEnterpriseAsync)
 router.post('/createEnterprise',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateEnterprise.createEnterprise), Controller.createEnterpriseAsync)
 router.put('/updateEnterprise', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateEnterpriseAsync)
 router.delete('/deleteEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteEnterpriseAsync)
+router.delete('/deleteForceEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceEnterpriseAsync)
 
 
 module.exports = router

@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon --inspect src/server.js",
+    "start": "env-cmd -f ./.env nodemon --inspect src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-console.log.log --copy-files",
     "build:prod": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-console.log.log --copy-files",
@@ -12,7 +12,9 @@
     "start:prod": "node dist/src/server.js",
     "dev": "nodemon src/server.js",
     "pm2": "yarn build && yarn pm2:start",
-    "pm2:start": "pm2 start ecosystem.config.js"
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "heroku-prebuild": "npm install -f",
+    "heroku-postbuild": "npm run prod"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +26,7 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^1.0.1",
+    "dateformat": "^5.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase": "^9.1.1",
@@ -38,6 +41,9 @@
     "nodemailer": "^6.6.3",
     "otp-generator": "^2.0.1",
     "path": "^0.12.7",
+    "paypal-node-sdk": "^2.0.3",
+    "paypal-rest-sdk": "^1.8.1",
+    "serve": "^12.0.1",
     "socket.io": "^2.3.0",
     "uuid-v4": "^0.1.0",
     "validator": "^13.5.2",

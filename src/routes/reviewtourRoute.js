@@ -26,6 +26,8 @@ router.get('/getReviewOfTour', Controller.getReviewOfTourAsync)
 router.post('/createReviewTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.User]), Validate.body(SchemaValidateReviewTour.createReviewTour), Controller.createReviewTourAsync)
 router.put('/updateReviewTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.User]),  Controller.updateReviewTourAsync)
 router.delete('/deleteReviewTour', jwtServices.verify, Controller.deleteReviewTourAsync)
+router.delete('/deleteForceReviewTour', jwtServices.verify, Controller.deleteForceReviewTourAsync)
+
 
 
 module.exports = router

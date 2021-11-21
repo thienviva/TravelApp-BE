@@ -42,12 +42,47 @@ exports.registerUserAsync = async body => {
 			success: true,
 			data: generateToken,
 			email: email,
-			otp: otp
+			otp: otp,
+			role: newUser.role
 		};
 	} catch (err) {
 		console.log(err);
 		return {
 			error: 'Internal Server',
+			success: false
+		};
+	}
+};
+
+exports.editProfileAsync = async (id, body) => {
+	try {
+		const user = await USER.findOneAndUpdate({ _id: id }, body, { new: true });
+		return {
+			message: 'Edit Profile Successfully',
+			success: true,
+			data: user
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'An error occurred',
+			success: false
+		};
+	}
+};
+
+exports.updateAvatarAsync = async (id, body) => {
+	try {
+		const user = await USER.findOneAndUpdate({ _id: id }, body, { new: true });
+		return {
+			message: 'Update Avatar Successfully',
+			success: true,
+			data: user
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'An error occurred',
 			success: false
 		};
 	}
@@ -116,6 +151,12 @@ exports.loginAsync = async body => {
 				success: false
 			};
 		}
+		if (user.verify == false) {
+			return {
+				message: 'Unverified Account !!',
+				success: false
+			};
+		}
 		console.log(user);
 		const generateToken = jwtServices.createToken({
 			id: user._id,
@@ -127,7 +168,8 @@ exports.loginAsync = async body => {
 			message: 'Successfully login',
 			success: true,
 			data: {
-				token: generateToken
+				token: generateToken,
+				user: user
 			}
 		};
 	} catch (err) {
@@ -192,7 +234,7 @@ exports.changePasswordAsync = async (id, body) => {
 exports.fotgotPassword = async body => {
 	try {
 		const email = body.email;
-		var otp = await otpGenerator.generate(6, {
+		var otp = await otpGenerator.generate(4, {
 			upperCase: false,
 			specialChars: false
 		});
@@ -265,16 +307,17 @@ exports.fotgotPassword = async body => {
 exports.resetPassword = async body => {
 	try {
 		const { otp, password, email } = body;
+
 		let user = await USER.findOne({ email: email });
 		if (user != null) {
 			if (otp == user.otp) {
 				const hashedPassword = await bcrypt.hash(password, 8);
-				const otp = otpGenerator.generate(6, {
-					upperCase: false,
-					specialChars: false
-				});
+				// const otp = otpGenerator.generate(6, {
+				// 	upperCase: false,
+				// 	specialChars: false
+				// });
 				user.password = hashedPassword;
-				user.otp = otp;
+				user.otp = '';
 				user.save();
 				return {
 					message: 'Reset Password success',
@@ -309,5 +352,39 @@ exports._findAdminByRoleAsync = async () => {
 	} catch (err) {
 		console.log(err);
 		return null;
+	}
+};
+
+exports.verifyUser = async body => {
+	try {
+		const { otp, email } = body;
+
+		let user = await USER.findOne({ email: email });
+		if (user != null) {
+			if (otp == user.otp) {	
+				user.verify = true;
+				user.otp = '';
+				user.save();
+				return {
+					message: 'Account Verification Successful',
+					success: true
+				};
+			} else {
+				return {
+					message: 'OTP invalid',
+					success: false
+				};
+			}
+		} else {
+			return {
+				message: 'Do not Email',
+				success: false
+			};
+		}
+	} catch (error) {
+		return {
+			message: 'An error occurred',
+			success: false
+		};
 	}
 };

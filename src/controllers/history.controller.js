@@ -76,6 +76,31 @@ exports.deleteHistoryAsync = async (req, res, next) => {
 };
 
 
+exports.deleteForceHistoryAsync = async (req, res, next) => {
+  try {
+    const resServices = await HistoryServices.deleteForceHistoryAsync(req.query.id);
+
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
+    }
+
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (e) {
+    return controller.sendError(res);
+  }
+};
+
+
 exports.getAllHistoryAsync = async (req, res, next) => {
     try {
         const resServices = await HistoryServices.getAllHistoryAsync();

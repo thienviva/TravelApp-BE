@@ -61,6 +61,23 @@ exports.deleteHistoryAsync = async (id) => {
   }
 };
 
+exports.deleteForceHistoryAsync = async (id) => {
+  try {
+    const history = await HISTORY.deleteOne({ _id: id });
+
+    return {
+      message: "Successfully Delete forever history",
+      success: true,
+      data: history,
+    };
+  } catch (e) {
+    return {
+      message: "An error occurred",
+      success: false,
+    };
+  }
+};
+
 exports.getAllHistoryAsync = async () => {
   try {
     const histories = await HISTORY.findDeleted();

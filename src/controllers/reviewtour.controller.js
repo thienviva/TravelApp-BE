@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
 const TOUR = require('../models/Tour.model');
 const REVIEWTOUR = require('../models/ReviewTour.model');
+const USER = require('../models/User.model');
 
 exports.getOneReviewTourAsync = async (req, res, next) => {
     try {
@@ -185,14 +186,49 @@ exports.deleteReviewTourAsync = async (req, res, next) => {
         const { decodeToken } = req.value.body;
         const userId = decodeToken.data.id;
         const user = await USER.findOne({ _id: userId });
-        const reviewTour = await REVIEWTOUR.findById({ _id: req.body.id });
-        if (user.role != 1 && userId != reviewTour.idUser) {
+        const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
+        if (user.role != 0 && userId != reviewTour.idUser) {
             return {
                 message: 'Verify Role Failed',
                 success: false
             };
         }
         const resServices = await reviewtourServices.deleteReviewTourAsync(req.query.id);
+        if (resServices.success) {
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    } catch (error) {
+        // bug
+        console.log(error);
+        return controller.sendError(res);
+    }
+};
+
+
+exports.deleteForceReviewTourAsync = async (req, res, next) => {
+    try {
+        const { decodeToken } = req.value.body;
+        const userId = decodeToken.data.id;
+        const user = await USER.findOne({ _id: userId });
+        const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
+        if (user.role != 0 && userId != reviewTour.idUser) {
+            return {
+                message: 'Verify Role Failed',
+                success: false
+            };
+        }
+        const resServices = await reviewtourServices.deleteForceReviewTourAsync(req.query.id);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,

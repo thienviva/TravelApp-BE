@@ -50,6 +50,23 @@ const defaultStatusPayment = {
   paid:1
 }
 
+const defaultCategoryTour = {
+  others: 0,
+  sea: 1,
+  highland: 2
+}
+
+const defaultBookTour = {
+  AWAIT:0,
+  COMPLETE:1,
+  CANCEL:2
+}
+const defaultPayment={
+  COD:0,
+  PayPal:1, 
+  VNPay:2,
+}
+
 module.exports ={
   defaultModel,
   defaultRoles,
@@ -57,5 +74,8 @@ module.exports ={
   defaultVehicles,
   defaultStatus,
   defaultChatSocket,
-  defaultStatusPayment
+  defaultStatusPayment,
+  defaultCategoryTour,
+  defaultBookTour,
+  defaultPayment
 }

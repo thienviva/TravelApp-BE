@@ -25,7 +25,11 @@ router.get('/getAllTour', Controller.getAllTourAsync)
 router.post('/createTour',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateTour.createTour), Controller.createTourAsync)
 router.put('/updateTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateTourAsync)
 router.delete('/deleteTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteTourAsync)
+router.delete('/deleteForceTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceTourAsync)
 router.get('/findTourByName', Controller.findTourByNameAsync)
+router.get('/findTourByCategory', Controller.findTourByCategoryAsync)
+router.get('/findAllTourByCategory', Controller.findAllTourByCategoryAsync)
+router.get('/getPageNumbers', Controller.getPageNumbersAsync)
 
 
 

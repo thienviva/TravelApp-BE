@@ -9,7 +9,9 @@ const configEnv = {
 	AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY,
 	AWS_SECRET_KEY: process.env.AWS_SECRET_KEY,
 	Email: process.env.Email,
-	Password: process.env.Password
+	Password: process.env.Password,
+	CLIENT_ID: process.env.CLIENT_ID,
+	CLIENT_SECRET: process.env.CLIENT_SECRET
 };
 const DFRoleValue = ["User", "Admin","Staff"]
 const DFVehiclesValue = ["Car","Bus", "Ship", "Plane"]

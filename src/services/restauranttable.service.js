@@ -93,7 +93,24 @@ exports.deleteRestaurantTableAsync = async (id) => {
         return {
             message: 'Successfully Delete RestaurantTable',
             success: true,
-            data: restaurantTable
+  
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.deleteForceRestaurantTableAsync = async (id) => {
+    try {
+        const restaurantTable = await TABLE.deleteOne({ _id: id });
+        return {
+            message: 'Successfully Delete forever RestaurantTable',
+            success: true,
+           
         };
     } catch (e) {
         console.log(e);

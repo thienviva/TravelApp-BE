@@ -101,3 +101,22 @@ exports.deleteVehicleAsync = async (id) => {
         };
     }
 }
+
+
+
+exports.deleteForceVehicleAsync = async (id) => {
+    try {
+        const vehicle = await VEHICLE.deleteOne({ _id: id })
+        return {
+            message: 'Delete vehicle forever successfully',
+            success: true,
+        };
+    }
+    catch (err) {
+        console.log(err);
+        return {
+            error: 'An error occurred',
+            success: false
+        };
+    }
+}

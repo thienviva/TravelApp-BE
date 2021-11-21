@@ -1,5 +1,5 @@
 const controller = require('./controller');
-const tourServices = require('../services/tour.service');
+const tourServices = require('../services/Tour.service');
 const userServices = require('../services/user.services');
 const { defaultTours } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
@@ -32,7 +32,12 @@ exports.getOneTourAsync = async (req, res, next) => {
 };
 exports.getAllTourAsync = async (req, res, next) => {
 	try {
-		const resServices = await tourServices.getAllTourAsync();
+		let query = {
+		
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.getAllTourAsync(query);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -66,7 +71,7 @@ exports.createTourAsync = async (req, res, next) => {
 			);
 		}
 
-		const vehicles = req.value.body.idVehicle;
+		const vehicles = req.value.body.idVehicles;
 		for(let i=0;i<vehicles.length;i++){
 			var vehicle = await VEHICLE.findOne({ _id: vehicles[i]});
 			if(vehicle==null){
@@ -190,9 +195,121 @@ exports.deleteTourAsync = async (req, res, next) => {
 	}
 };
 
+
+exports.deleteForceTourAsync = async (req, res, next) => {
+	try {
+		const resServices = await tourServices.deleteForceTourAsync(req.query.id);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+
 exports.findTourByNameAsync = async (req, res, next) => {
 	try {
-		const resServices = await tourServices.findTourByNameAsync(req.query.name);
+		let query = {
+			name:req.query.name||'',
+			category: req.query.category || '',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.findTourByNameAsync(query);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+exports.findTourByCategoryAsync = async (req, res, next) => {
+	try {
+		let query = {
+			category: req.query.category || '0',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.findTourByCategoryAsync(query);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+exports.findAllTourByCategoryAsync = async (req, res, next) => {
+	try {
+		const resServices = await tourServices.findAllTourByCategoryAsync(req.query.category);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+exports.getPageNumbersAsync = async (req, res, next) => {
+	try {
+		let query = {
+			limit: req.query.limit || '5',
+		};
+		const resServices = await tourServices.getPageNumbersAsync(query);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,

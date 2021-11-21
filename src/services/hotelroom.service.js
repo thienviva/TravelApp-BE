@@ -93,7 +93,25 @@ exports.deleteHotelRoomAsync = async (id) => {
         return {
             message: 'Successfully Delete HotelRoom',
             success: true,
-            data: hotelroom
+        
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+
+exports.deleteForceHotelRoomAsync = async (id) => {
+    try {
+        const hotelroom = await HOTELROOM.deleteOne({ _id: id });
+        return {
+            message: 'Successfully Delete forever HotelRoom',
+            success: true,
+        
         };
     } catch (e) {
         console.log(e);

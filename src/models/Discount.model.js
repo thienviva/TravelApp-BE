@@ -6,7 +6,7 @@ const mongooseDelete = require("mongoose-delete");
 const Discount = new Schema({
     idTour:defaultModel.stringR,
     code:defaultModel.string,
-    discount:defaultModel.string,
+    discount:defaultModel.number,
     status:defaultModel.number
 }, { timestamps: true })
 

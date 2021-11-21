@@ -1,5 +1,5 @@
 const controller = require('./controller');
-const DiscountServices = require('../services/discount.service');
+const DiscountServices = require('../services/Discount.service');
 const userServices = require('../services/user.services');
 const { defaultDiscounts } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
@@ -146,6 +146,31 @@ exports.updateDiscountAsync = async (req, res, next) => {
 exports.deleteDiscountAsync = async (req, res, next) => {
 	try {
 		const resServices = await DiscountServices.deleteDiscountAsync(req.query.id);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+
+exports.deleteForceDiscountAsync = async (req, res, next) => {
+	try {
+		const resServices = await DiscountServices.deleteForceDiscountAsync(req.query.id);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,

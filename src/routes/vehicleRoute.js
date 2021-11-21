@@ -24,6 +24,8 @@ router.get('/getAllVehicle', Controller.getAllVehicleAsync)
 router.post('/createVehicle', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]),Validate.body(SchemaValidateVehicle.createVehicle), Controller.createVehicleAsync);
 router.put('/updateVehicle', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.updateVehicleAsync);
 router.delete('/deleteVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteVehicleAsync);
+router.delete('/deleteForceVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceVehicleAsync);
+
 
 
 

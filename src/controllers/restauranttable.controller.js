@@ -1,5 +1,5 @@
 const controller = require('./controller');
-const tableServices = require('../services/restaurantTable.service');
+const tableServices = require('../services/RestaurantTable.service');
 const userServices = require('../services/user.services');
 const { defaultEnterprises } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
@@ -162,6 +162,31 @@ exports.updateRestaurantTableAsync = async (req, res, next) => {
 exports.deleteRestaurantTableAsync = async (req, res, next) => {
     try {
         const resServices = await tableServices.deleteRestaurantTableAsync(req.query.id);
+        if (resServices.success) {
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    } catch (error) {
+        // bug
+        console.log(error);
+        return controller.sendError(res);
+    }
+};
+
+
+exports.deleteForceRestaurantTableAsync = async (req, res, next) => {
+    try {
+        const resServices = await tableServices.deleteForceRestaurantTableAsync(req.query.id);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,

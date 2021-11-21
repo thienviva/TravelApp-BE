@@ -17,13 +17,34 @@ exports.getOneDiscountAsync = async (id) => {
         };
     }
 };
+
 exports.getAllDiscountAsync = async () => {
     try {
         const discount = await DISCOUNT.find();
+        var dataDiscount =[];
+
+
+        for(let i =0;i<discount.length;i++){
+            var tour = await TOUR.findOne({ _id: discount[i].idTour });
+
+          
+            var data ={
+                idTour:discount[i].idTour,
+                code:discount[i].code,
+                discount:discount[i].discount,
+                status:discount[i].status,
+                nameTour:tour.name
+            }
+
+             dataDiscount.push(data)
+
+
+        }
+    
         return {
             message: 'Successfully Get All Discount',
             success: true,
-            data: discount
+            data: dataDiscount
         };
     } catch (e) {
         console.log(e);
@@ -95,6 +116,24 @@ exports.deleteDiscountAsync = async (id) => {
             message: 'Successfully Delete Discount',
             success: true,
             data: discount
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+
+exports.deleteForceDiscountAsync = async (id) => {
+    try {
+        const discount = await DISCOUNT.deleteOne({ _id: id });
+        return {
+            message: 'Successfully Delete forever Discount',
+            success: true,
+          
         };
     } catch (e) {
         console.log(e);

@@ -85,3 +85,20 @@ exports.deleteEnterpriseAsync = async (id) => {
 		};
 	}
 };
+
+
+exports.deleteForceEnterpriseAsync = async (id) => {
+	try {
+		const enterprise = await ENTERPRISE.deleteOne({ _id: id });
+		return {
+			message: 'Successfully Delete forever Enterprise',
+			success: true,
+		};
+	} catch (e) {
+		console.log(e);
+		return {
+			message: 'An error occurred',
+			success: false
+		};
+	}
+};
