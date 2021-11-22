@@ -1,5 +1,5 @@
 const controller = require('./controller');
-const tableServices = require('../services/restaurantTable.service');
+const tableServices = require('../services/restauranttable.service');
 const userServices = require('../services/user.services');
 const { defaultEnterprises } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
