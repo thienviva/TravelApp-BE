@@ -1,5 +1,5 @@
 const controller = require("./controller");
-const bookTourServices = require("../services/bookTour.service");
+const bookTourServices = require("../services/booktour.service");
 const { defaultBookTour, defaultStatusPayment, defaultPayment } = require('../config/defineModel');
 const TOUR = require("../models/Tour.model");
 const BOOKTOUR = require("../models/BookTour.model");
