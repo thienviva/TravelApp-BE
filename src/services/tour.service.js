@@ -21,6 +21,7 @@ exports.getOneTourAsync = async (id) => {
 exports.getAllTourAsync = async body => {
     try {
         const { skip, limit } = body;
+    
         const tour = await TOUR.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour',
@@ -35,6 +36,26 @@ exports.getAllTourAsync = async body => {
         };
     }
 };
+
+exports.getAllTourWithDeletedAsync = async body => {
+    try {
+        const { name, skip, limit } = body;
+        var nameRegex = new RegExp(name);
+        const tour = await TOUR.findWithDeleted({ name: { $regex: nameRegex, $options: 'i' }}).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        return {
+            message: 'Successfully Get All Tour With Deleted',
+            success: true,
+            data: tour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
 exports.createTourAsync = async body => {
     try {
         const tour = new TOUR(body);
@@ -79,6 +100,23 @@ exports.deleteTourAsync = async (id) => {
         const tour = await TOUR.delete({ _id: id });
         return {
             message: 'Successfully Delete Tour',
+            success: true,
+            data: tour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.restoreTourAsync = async (id) => {
+    try {
+        const tour = await TOUR.restore({ _id: id });
+        return {
+            message: 'Successfully Restore Tour',
             success: true,
             data: tour
         };

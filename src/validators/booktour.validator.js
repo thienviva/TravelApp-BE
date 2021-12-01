@@ -8,6 +8,8 @@ const schemas = {
 		codediscount: joi.string(),
 		idPay: joi.string(),
 		paymentStatus: joi.number(),
+		startDate: joi.date(),
+		endDate: joi.date(),
 	}),
 	bookTourPayment: joi.object().keys({
 		idUser: joi.string(),
@@ -18,6 +20,8 @@ const schemas = {
 		idPay: joi.string(),
 		paymentStatus: joi.number(),
 		typePayment: joi.number(),
+		startDate: joi.date(),
+		endDate: joi.date(),
 	}),
 	paymentTour: joi.object().keys({
 		name: joi.string(),

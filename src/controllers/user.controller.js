@@ -5,45 +5,26 @@ const jwtServices = require('../services/jwt.services');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
+const { sendMail } = require('../services/sendMail.service');
 
 exports.registerAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.registerUserAsync(req.value.body);
-		var smtpTransport = await nodemailer.createTransport({
-			service: "gmail", //smtp.gmail.com  //in place of service use host...
-			secure: false, //true
-			port: 25, //465
-			auth: {
-				user: configEnv.Email,
-				pass: configEnv.Password
-			},
-			tls: {
-				rejectUnauthorized: false,
-			},
-		});
-		const mailOptions = {
-			to: resServices.email,
-			from: configEnv.Email,
-			subject: 'Đăng ký tài khoản Travel Around',
-			text: 'Mã OTP của bạn là: ' + resServices.otp
-		};
-		smtpTransport.sendMail(mailOptions, function (error, response) {
-			if (error) {
-				return controller.sendSuccess(
-					res,
-					resServices.data,
-					300,
-					resServices.message
-				);
-			} else {
-				controller.sendSuccess(
-					res,
-					resServices.data,
-					200,
-					resServices.message
-				);
-			}
-		});
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				300,
+				resServices.message
+			);
+		}
+
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
 
 	} catch (err) {
 		console.log(err);
@@ -51,53 +32,71 @@ exports.registerAsync = async (req, res, next) => {
 	}
 };
 
-exports.registerAdminAsync = async (req, res, next) => {
-	try {
-		const resServices = await userServices.registerAdminAsync(req.value.body);
-		var smtpTransport = await nodemailer.createTransport({
-			service: "gmail", //smtp.gmail.com  //in place of service use host...
-			secure: false, //true
-			port: 25, //465
-			auth: {
-				user: configEnv.Email,
-				pass: configEnv.Password
-			},
-			tls: {
-				rejectUnauthorized: false,
-			},
-		});
-		const mailOptions = {
-			to: resServices.email,
-			from: configEnv.Email,
-			subject: 'Tài khoản Admin Travel Around',
-			text: 'Chào mừng bạn đã thành Admin ứng dụng du lịch Travel Around của chúng tôi!'
-		};
-		smtpTransport.sendMail(mailOptions, function (error, response) {
-			if (error) {
-				return controller.sendSuccess(
-					res,
-					resServices.data,
-					300,
-					resServices.message
-				);
-			} else {
-				controller.sendSuccess(
-					res,
-					resServices.data,
-					200,
-					resServices.message
-				);
-			}
-		});
-	} catch (err) {
-		console.log(err);
-		return controller.sendError(res);
-	}
-};
+// exports.registerAdminAsync = async (req, res, next) => {
+// 	try {
+// 		const resServices = await userServices.registerAdminAsync(req.value.body);
+// 		var smtpTransport = await nodemailer.createTransport({
+// 			service: "gmail", //smtp.gmail.com  //in place of service use host...
+// 			secure: false, //true
+// 			port: 465, //465 //25
+// 			auth: {
+// 				user: configEnv.Email,
+// 				pass: configEnv.Password
+// 			},
+// 			tls: {
+// 				rejectUnauthorized: false,
+// 			},
+// 		});
+// 		const mailOptions = {
+// 			to: resServices.email,
+// 			from: configEnv.Email,
+// 			subject: 'Tài khoản Admin Travel Around',
+// 			text: 'Chào mừng bạn đã thành Admin ứng dụng du lịch Travel Around của chúng tôi!'
+// 		};
+// 		smtpTransport.sendMail(mailOptions, function (error, response) {
+// 			if (error) {
+// 				return controller.sendSuccess(
+// 					res,
+// 					resServices.data,
+// 					300,
+// 					resServices.message
+// 				);
+// 			} else {
+// 				controller.sendSuccess(
+// 					res,
+// 					resServices.data,
+// 					200,
+// 					resServices.message
+// 				);
+// 			}
+// 		});
+// 	} catch (err) {
+// 		console.log(err);
+// 		return controller.sendError(res);
+// 	}
+// };
 
 exports.loginAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.loginAsync(req.value.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 300, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+	} catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+};
+
+exports.loginAdminAsync = async (req, res, next) => {
+	try {
+		const resServices = await userServices.loginAdminAsync(req.value.body);
 		if (!resServices.success) {
 			return controller.sendSuccess(res, {}, 300, resServices.message);
 		}
@@ -127,7 +126,7 @@ exports.forgotPasswordAsync = async (req, res, next) => {
 		}
 		return controller.sendSuccess(
 			res,
-			resServices.data,
+			resServices.success,
 			200,
 			resServices.message
 		);

@@ -57,6 +57,36 @@ exports.getAllUserAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
+exports.getAllUserWithDeletedAsync = async (req, res, next) => {
+    try {
+        let query = {
+            name: req.query.name || '',
+            limit: req.query.limit || '15',
+            skip: req.query.skip || '1',
+        };
+        const resServices = await adminServices.getAllUserWithDeletedAsync(query);
+        if (resServices.success) {
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    } catch (error) {
+        // bug
+        console.log(error);
+        return controller.sendError(res);
+    }
+};
+
 exports.createUserAsync = async (req, res, next) => {
     try {
 
@@ -156,6 +186,29 @@ exports.deleteUserAsync = async (req, res, next) => {
     }
 };
 
+exports.restoreUserAsync = async (req, res, next) => {
+    try {
+        const resServices = await adminServices.restoreUserAsync(req.query.id);
+        if (resServices.success) {
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    } catch (error) {
+        // bug
+        console.log(error);
+        return controller.sendError(res);
+    }
+};
 
 exports.deleteForceUserAsync = async (req, res, next) => {
     try {

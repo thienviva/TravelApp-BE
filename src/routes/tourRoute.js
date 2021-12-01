@@ -22,9 +22,11 @@ var cpUpload = upload.fields([{ name: 'ImagesTour', maxCount: 100 }]);
 
 router.get('/getOneTour', Controller.getOneTourAsync)
 router.get('/getAllTour', Controller.getAllTourAsync)
+router.get('/getAllTourWithDeleted', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.getAllTourWithDeletedAsync)
 router.post('/createTour',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateTour.createTour), Controller.createTourAsync)
 router.put('/updateTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateTourAsync)
 router.delete('/deleteTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteTourAsync)
+router.post('/restoreTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.restoreTourAsync)
 router.delete('/deleteForceTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceTourAsync)
 router.get('/findTourByName', Controller.findTourByNameAsync)
 router.get('/findTourByCategory', Controller.findTourByCategoryAsync)

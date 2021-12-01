@@ -11,6 +11,8 @@ const BookTour = new Schema(
     status: defaultModel.number,
     finalpayment: defaultModel.number,
     paymentStatus: defaultModel.number,
+    startDate: defaultModel.date,
+    endDate: defaultModel.date,
   },
   { timestamps: true }
 );

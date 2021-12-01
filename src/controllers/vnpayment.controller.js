@@ -20,7 +20,7 @@ exports.postCreatePaymentUrl = async (req, res, next) => {
     var tmnCode = 'I9MOQNMX';
     var secretKey = 'RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX';
     var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    var returnUrl = 'http://localhost:5000/vnpayment/vnpay_return';
+    var returnUrl = 'https://app-travelbe.herokuapp.com/vnpayment/vnpay_return';
     var date = new Date();
 
     //  var createDate = dateFormat(date, 'yyyymmddHHmmss');

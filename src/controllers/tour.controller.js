@@ -1,6 +1,5 @@
 const controller = require('./controller');
 const tourServices = require('../services/tour.service');
-const userServices = require('../services/user.services');
 const { defaultTours } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
@@ -58,6 +57,36 @@ exports.getAllTourAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
+exports.getAllTourWithDeletedAsync = async (req, res, next) => {
+	try {
+		let query = {
+			name:req.query.name||'',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.getAllTourWithDeletedAsync(query);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
 exports.createTourAsync = async (req, res, next) => {
 	try {
 		console.log(req.value.body.idEnterprise);
@@ -195,6 +224,29 @@ exports.deleteTourAsync = async (req, res, next) => {
 	}
 };
 
+exports.restoreTourAsync = async (req, res, next) => {
+	try {
+		const resServices = await tourServices.restoreTourAsync(req.query.id);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
 
 exports.deleteForceTourAsync = async (req, res, next) => {
 	try {

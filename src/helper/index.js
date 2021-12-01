@@ -8,15 +8,16 @@ exports.convertObjectFieldString = (obj = {}) => {
   }, {})
 }
 
-exports.paymentMethod = async (name, price, idUser, idTour, next) => {
+exports.paymentMethod = async (name, price, idUser, idTour,startDate,endDate, next) => {
   const create_payment_json = {
     intent: "sale",
     payer: {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
-      cancel_url: "http://localhost:5000/payment/cancel",
+      // return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
+      return_url: `https://fe-travelapp.vercel.app/booktour/payment?price=${price}&idUser=${idUser}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`,
+      cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
     },
     transactions: [
       {
@@ -59,4 +60,18 @@ exports.sortObject = (obj) => {
       sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
   }
   return sorted;
+}
+
+exports.formatDateYYMMDD = (date) => {
+	var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+
+	if (month.length < 2) 
+			month = '0' + month;
+	if (day.length < 2) 
+			day = '0' + day;
+
+	return [year, month, day].join('-');
 }

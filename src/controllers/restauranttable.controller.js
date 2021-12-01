@@ -55,7 +55,7 @@ exports.getAllRestaurantTableAsync = async (req, res, next) => {
 };
 exports.getTableOfEnterpriseAsync = async (req, res, next) => {
     try {
-        const resServices = await tableServices.getTableOfEnterpriseAsync(req.body.idEnterprise);
+        const resServices = await tableServices.getTableOfEnterpriseAsync(req.query.idEnterprise);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,

@@ -26,9 +26,28 @@ exports.getOneUserAsync = async (id) => {
 exports.getAllUserAsync = async body => {
     try {
         const { skip, limit } = body;
+        
         const user = await USER.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All User',
+            success: true,
+            data: user
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+exports.getAllUserWithDeletedAsync = async body => {
+    try {
+        const { name, skip, limit } = body;
+        var nameRegex = new RegExp(name);
+        const user = await USER.findWithDeleted({ name: { $regex: nameRegex, $options: 'i' } }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        return {
+            message: 'Successfully Get All User With Deleted',
             success: true,
             data: user
         };
@@ -107,7 +126,24 @@ exports.deleteUserAsync = async (id) => {
     try {
         const user = await USER.delete({ _id: id });
         return {
-            message: 'Successfully Delete user',
+            message: 'Successfully Delete User',
+            success: true,
+            data: user
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.restoreUserAsync = async (id) => {
+    try {
+        const user = await USER.restore({ _id: id });
+        return {
+            message: 'Successfully Restore User',
             success: true,
             data: user
         };

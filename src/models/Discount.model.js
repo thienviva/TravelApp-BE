@@ -7,7 +7,9 @@ const Discount = new Schema({
     idTour:defaultModel.stringR,
     code:defaultModel.string,
     discount:defaultModel.number,
-    status:defaultModel.number
+    status:defaultModel.number,
+    startDiscount: defaultModel.date,
+    endDiscount: defaultModel.date,
 }, { timestamps: true })
 
 Discount.plugin(mongooseDelete);

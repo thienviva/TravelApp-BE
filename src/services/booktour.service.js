@@ -1,26 +1,30 @@
 const { defaultBookTour, defaultStatusPayment, defaultPayment } = require('../config/defineModel');
 const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
+const USER = require('../models/User.model');
 const DISCOUNT = require('../models/Discount.model');
 const paypal = require("paypal-rest-sdk");
+const { CostExplorer } = require('aws-sdk');
 
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
         var discount = await DISCOUNT.findOne({ code: body.codediscount, idTour: body.idTour });
         var bookTour;
+        var today = new Date();
         if (body.codediscount == null) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
                 idPay: "Chưa thanh toán",
                 finalpayment: tour.payment,
+                startDate: body.startDate,
+                endDate: body.endDate
             });
             await bookTour.save();
         }
         else {
-
-            if (discount == null) {
+            if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
                 return {
                     message: "Code Discount doesn't exist",
                     success: false,
@@ -32,12 +36,11 @@ exports.bookTourAsync = async (body) => {
                 idTour: body.idTour,
                 idPay: "Chưa thanh toán",
                 finalpayment: finalpayment,
+                startDate: body.startDate,
+                endDate: body.endDate
             });
-
             await bookTour.save();
         }
-
-
         return {
             message: "Successfully Book Tour",
             success: true,
@@ -97,6 +100,28 @@ exports.updateBookTourAsync = async (id, body) => {
     }
 };
 
+exports.cancelBookTourAsync = async (id) => {
+    try {
+        const bookTour = await BOOKTOUR.findOneAndUpdate(
+            { _id: id },
+            { status: defaultBookTour.CANCEL },
+            { new: true }
+        );
+        return {
+            message: 'Successfully Cancel BookTour',
+            success: true,
+            data: bookTour
+        };
+
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
 exports.deleteBookTourAsync = async (id) => {
     try {
         const bookTour = await BOOKTOUR.delete({ _id: id });
@@ -133,11 +158,38 @@ exports.deleteForceBookTourAsync = async (id) => {
 
 exports.getAllBookTourAsync = async () => {
     try {
-        const bookTours = await BOOKTOUR.find();
+        const listBookTour = await BOOKTOUR.find();
+        if (listBookTour == null) {
+            return {
+                message: "Dont have BookTour",
+                success: true,
+            };
+        }
+        else {
+            var data = [];
+            for (let i = 0; i < listBookTour.length; i++) {
+                var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
+                var user = await USER.findOne({ _id: listBookTour[i].idUser });
+                var result = {
+
+                    tour: tour,
+                    user: user,
+                    status: listBookTour[i].status,
+                    idTour: listBookTour[i].idTour,
+                    idUser: listBookTour[i].idUser,
+                    finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
+                    _id:listBookTour[i]._id,
+                };
+                data.push(result);
+            }
+
+        }
         return {
             message: "Successfully get all BookTour",
             success: true,
-            data: bookTours,
+            data: data,
         };
     } catch (e) {
         console.log(e);
@@ -163,6 +215,7 @@ exports.getUserBookTourAsync = async (id, body) => {
             for (let i = 0; i < listBookTour.length; i++) {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var result = {
+                    _id:listBookTour[i]._id,
                     idEnterprise: tour.idEnterprise,
                     idVehicles: tour.idVehicles,
                     name: tour.name,
@@ -174,9 +227,11 @@ exports.getUserBookTourAsync = async (id, body) => {
                     star: tour.star,
                     category: tour.category,
                     status: listBookTour[i].status,
-                    idTour: listBookTour[i].idUser,
-                    idUser: listBookTour[i].idTour,
+                    idTour: listBookTour[i].idTour,
+                    idUser: listBookTour[i].idUser,
                     finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
                 };
                 data.push(result);
             }
@@ -211,19 +266,3 @@ exports.getOneBookTourAsync = async (id) => {
         };
     }
 };
-
-function sortObject(obj) {
-	var sorted = {};
-	var str = [];
-	var key;
-	for (key in obj){
-		if (obj.hasOwnProperty(key)) {
-		str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
-    for (key = 0; key < str.length; key++) {
-        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-    }
-    return sorted;
-}

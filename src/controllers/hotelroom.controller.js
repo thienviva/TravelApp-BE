@@ -55,7 +55,7 @@ exports.getAllHotelRoomAsync = async (req, res, next) => {
 };
 exports.getRoomOfEnterpriseAsync = async (req, res, next) => {
     try {
-        const resServices = await hotelroomServices.getRoomOfEnterpriseAsync(req.body.idEnterprise);
+        const resServices = await hotelroomServices.getRoomOfEnterpriseAsync(req.query.idEnterprise);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,

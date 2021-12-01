@@ -9,8 +9,8 @@ const paypal = require("paypal-rest-sdk");
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: `http://localhost:5000/payment/success?price=${price}`,
-        cancel_url: "http://localhost:5000/payment/cancel",
+        return_url: `https://app-travelbe.herokuapp.com/payment/success?price=${price}`,
+        cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
       },
       transactions: [
         {

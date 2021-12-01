@@ -1,7 +1,7 @@
 const VEHICLE = require('../models/Vehicle.model');
 const { configEnv } = require('../config/index');
 const { UploadImage } = require("./uploadFirebase.service");
-
+const TOUR = require('../models/Tour.model');
 
 exports.getOneVehicleAsync = async (id) => {
     try {
@@ -28,6 +28,47 @@ exports.getAllVehicleAsync = async () => {
             message: 'Get all vehicle successfully',
             success: true,
             data: vehicle
+        };
+    }
+    catch (err) {
+        console.log(err);
+        return {
+            error: 'Internal Server',
+            success: false
+        };
+    }
+}
+
+
+exports.getAllVehicleOfTourAsync = async (id) => {
+    try {
+        const tour =  await TOUR.findById({ _id: id });
+        var dataVehicle =[]
+        
+        for(var i =0;i<tour.idVehicles.length;i++){
+
+            var vehicle = await VEHICLE.findById({_id:tour.idVehicles[i]});
+            dataVehicle.push(vehicle);
+            // var data = {
+            //     type:vehicle.type,
+            //     vehicleNumber: vehicle.vehicleNumber,
+            //     imagesVehicle:vehicle.imagesVehicle,
+            //     _id:vehicle._id,
+            //     name:vehicle.name,
+
+            // }
+        }
+        console.log(tour.idVehicles)
+        if(dataVehicle==null){
+            return {
+                message: 'Vehicle dont exist',
+                success: false
+            }
+        }
+        return {
+            message: 'Get all vehicle successfully',
+            success: true,
+            data: dataVehicle
         };
     }
     catch (err) {

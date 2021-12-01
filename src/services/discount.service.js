@@ -23,22 +23,20 @@ exports.getAllDiscountAsync = async () => {
         const discount = await DISCOUNT.find();
         var dataDiscount =[];
 
-
         for(let i =0;i<discount.length;i++){
             var tour = await TOUR.findOne({ _id: discount[i].idTour });
-
-          
             var data ={
+                _id:discount[i]._id,
                 idTour:discount[i].idTour,
                 code:discount[i].code,
                 discount:discount[i].discount,
+                startDiscount:discount[i].startDiscount,
+                endDiscount:discount[i].endDiscount,
                 status:discount[i].status,
-                nameTour:tour.name
+                nameTour:tour.name,
+                imageTour:tour.imagesTour[0]
             }
-
              dataDiscount.push(data)
-
-
         }
     
         return {
@@ -56,7 +54,7 @@ exports.getAllDiscountAsync = async () => {
 };
 exports.getDiscountOfTourAsync = async (idTour) => {
     try {
-        const discount = await DISCOUNT.find({ key: idTour });
+        const discount = await DISCOUNT.find({ idTour: idTour });
         return {
             message: 'Successfully Get Discount Of Tour',
             success: true,

@@ -60,6 +60,33 @@ exports.getAllVehicleAsync = async (req, res, next) => {
 
 }
 
+
+exports.getAllVehicleOfTourAsync = async (req, res, next) => {
+    try {
+        const resServices = await vehicleServices.getAllVehicleOfTourAsync(req.query.idTour);
+        if (resServices.success) {
+
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    }
+    catch (err) {
+        console.log(err);
+        return controller.sendError(res);
+    }
+
+}
+
 exports.createVehicleAsync = async (req, res, next) => {
     try {
         const Image = req.files["ImagesVehicle"];
