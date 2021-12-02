@@ -94,6 +94,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     req.value.body.endDate = endDate;
 
     if (req.value.body.typePayment == defaultPayment.VNPay) {
+      startDate = new Date(startDate).toISOString().slice(0, 10);
+      endDate = new Date(endDate).toISOString().slice(0, 10);
       if (req.value.body.codediscount == "") {
         var finalpayment = tour.payment;
         var ipAddr =
@@ -104,7 +106,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         var tmnCode = "I9MOQNMX";
         var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
         var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
+        var returnUrl = `https://app-travelbe.herokuapp.com/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
         var date = new Date();
 
         var createDate =
@@ -184,7 +186,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
           // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
-          var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
+          var returnUrl = `https://app-travelbe.herokuapp.com/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
 
           var date = new Date();
 

@@ -16,7 +16,7 @@ exports.paymentMethod = async (name, price, idUser, idTour,startDate,endDate, ne
     },
     redirect_urls: {
       // return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
-      return_url: `https://fe-travelapp.vercel.app/booktour/payment?price=${price}&idUser=${idUser}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`,
+      return_url: `https://app-travelbe.herokuapp.com/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`,
       cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
     },
     transactions: [
