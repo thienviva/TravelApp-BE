@@ -34,7 +34,8 @@ exports.getAllDiscountAsync = async () => {
                 endDiscount:discount[i].endDiscount,
                 status:discount[i].status,
                 nameTour:tour.name,
-                imageTour:tour.imagesTour[0]
+                imageTour:tour.imagesTour[0],
+                tour: tour,
             }
              dataDiscount.push(data)
         }

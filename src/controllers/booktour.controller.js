@@ -106,7 +106,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         var tmnCode = "I9MOQNMX";
         var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
         var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        var returnUrl = `https://app-travelbe.herokuapp.com/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
+        var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
         var date = new Date();
 
         var createDate =
@@ -186,7 +186,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
           // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
-          var returnUrl = `https://app-travelbe.herokuapp.com/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
+          var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
 
           var date = new Date();
 
@@ -674,6 +674,40 @@ exports.getUserBookTourAsync = async (req, res, next) => {
     const { decodeToken } = req.value.body;
     const userId = decodeToken.data.id;
     const resServices = await bookTourServices.getUserBookTourAsync(
+      userId,
+      query
+    );
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
+    }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
+};
+
+exports.getUserBookTourByDateAsync = async (req, res, next) => {
+  try {
+    let query = {
+      dateStart : req.query.dateStart || "",
+      dateEnd : req.query.dateEnd || "",
+    };
+    const { decodeToken } = req.value.body;
+    const userId = decodeToken.data.id;
+
+    const resServices = await bookTourServices.getUserBookTourByDateAsync(
       userId,
       query
     );

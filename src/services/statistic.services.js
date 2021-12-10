@@ -81,7 +81,7 @@ exports.statisticByData = async () => {
 
 exports.staticByBookTour = async body => {
 	try {
-		const { timeStart, timeEnd} = body;
+	const { timeStart, timeEnd} = body;
     const currentTime = new Date(timeStart);
     const start = new Date(currentTime.getTime()-7*3600*1000);
 	let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);

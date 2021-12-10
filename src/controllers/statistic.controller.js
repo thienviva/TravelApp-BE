@@ -36,12 +36,14 @@ exports.statisticByBookTour = async (req, res, next) => {
 
         const currentTime = new Date(timeStart);
 
-        const start = new Date(currentTime.getTime() - 7 * 3600 * 1000);
-
+        //const start = new Date(currentTime.getTime() - 7 * 3600 * 1000);
+        const start = new Date(currentTime.getTime())
+        //startDate = new Date(startDate).toISOString().slice(0, 10);
         let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);
-        const end = new Date(new Date(endTimeByDay).getTime() - 7 * 3600 * 1000);
+        //const end = new Date(new Date(endTimeByDay).getTime() - 7 * 3600 * 1000);
+        const end = new Date(new Date(endTimeByDay).getTime());
 
-        var day = new Date(end.getTime() - start.getTime());
+        //var day = new Date(end.getTime() - start.getTime());
         var difference = Math.abs(end - start);
         var days = difference / (1000 * 3600 * 24);
         var changeDays = Math.floor(days);
@@ -49,7 +51,7 @@ exports.statisticByBookTour = async (req, res, next) => {
         if (changeDays < days)
             changeDays = changeDays + 1;
         for (let i = 0; i < changeDays; i++) {
-            var dayCurrent = new Date();
+            var dayCurrent = new Date(timeStart);
             dayCurrent = dayCurrent.setDate(start.getDate() + i);
             var formatDayCurrent = formatDateYYMMDD(dayCurrent);
             console.log(formatDayCurrent)

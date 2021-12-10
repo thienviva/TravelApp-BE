@@ -3,8 +3,7 @@ const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
 const USER = require('../models/User.model');
 const DISCOUNT = require('../models/Discount.model');
-const paypal = require("paypal-rest-sdk");
-const { CostExplorer } = require('aws-sdk');
+const { formatDateYYMMDD } = require("../helper");
 
 exports.bookTourAsync = async (body) => {
     try {
@@ -180,7 +179,7 @@ exports.getAllBookTourAsync = async () => {
                     finalpayment: listBookTour[i].finalpayment,
                     startDate: listBookTour[i].startDate,
                     endDate: listBookTour[i].endDate,
-                    _id:listBookTour[i]._id,
+                    _id: listBookTour[i]._id,
                 };
                 data.push(result);
             }
@@ -215,7 +214,7 @@ exports.getUserBookTourAsync = async (id, body) => {
             for (let i = 0; i < listBookTour.length; i++) {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var result = {
-                    _id:listBookTour[i]._id,
+                    _id: listBookTour[i]._id,
                     idEnterprise: tour.idEnterprise,
                     idVehicles: tour.idVehicles,
                     name: tour.name,
@@ -257,6 +256,65 @@ exports.getOneBookTourAsync = async (id) => {
             message: "Successfully get a BookTour",
             success: true,
             data: BookTour,
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: "An error occurred",
+            success: false,
+        };
+    }
+};
+
+exports.getUserBookTourByDateAsync = async (id, body) => {
+    try {
+        const { dateStart, dateEnd } = body;
+        const currentTime = new Date(dateStart);
+        let endTimeByDay = new Date(dateEnd).setHours(23, 59, 59, 999);
+        var listBookTour = await BOOKTOUR.find({
+            status: { $in: [defaultBookTour.COMPLETE, defaultBookTour.AWAIT, defaultBookTour.CANCEL] },
+            startDate: {
+                $gte: currentTime,
+                $lt: endTimeByDay
+            }
+        });
+        if (listBookTour == null) {
+            return {
+                message: "Dont have BookTour",
+                success: true,
+            };
+        }
+        else {
+            var data = [];
+            for (let i = 0; i < listBookTour.length; i++) {
+                var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
+                var result = {
+                    _id: listBookTour[i]._id,
+                    idEnterprise: tour.idEnterprise,
+                    idVehicles: tour.idVehicles,
+                    name: tour.name,
+                    place: tour.place,
+                    detail: tour.detail,
+                    time: tour.time,
+                    payment: tour.payment,
+                    imagesTour: tour.imagesTour,
+                    star: tour.star,
+                    category: tour.category,
+                    status: listBookTour[i].status,
+                    idTour: listBookTour[i].idTour,
+                    idUser: listBookTour[i].idUser,
+                    finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
+                };
+                data.push(result);
+            }
+        }
+        console.log(data);
+        return {
+            message: "Successfully get user BookTour by Date",
+            success: true,
+            data: data,
         };
     } catch (e) {
         console.log(e);

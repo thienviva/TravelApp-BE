@@ -18,6 +18,7 @@ router.delete('/deleteForceBookTour',jwtServices.verify, checkRole([defaultRoles
 router.get('/getAllBookTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.getAllBookTourAsync)
 router.get('/getOneBookTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.getOneBookTourAsync)
 router.get('/getUserBookTour',jwtServices.verify, checkRole([defaultRoles.User]), Controller.getUserBookTourAsync)
+router.get('/getUserBookTourByDate',jwtServices.verify, checkRole([defaultRoles.User]), Controller.getUserBookTourByDateAsync)
 router.get('/paymentVNPay', Controller.paymentVNPay)
 router.get('/paymentPayPal', Controller.paymentPayPal)
 
