@@ -19,7 +19,7 @@ exports.registerUserAsync = async body => {
 				message: 'Email already exists',
 				success: false
 			};
-		var otp = await otpGenerator.generate(6, {
+		var otp = await otpGenerator.generate(4, {
 			upperCase: false,
 			specialChars: false
 		});
