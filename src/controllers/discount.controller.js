@@ -53,6 +53,33 @@ exports.getAllDiscountAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+exports.getAllDiscountByEXPAsync = async (req, res, next) => {
+	try {
+		let query = {
+            limit: req.query.limit || '15',
+            skip: req.query.skip || '1',
+        };
+		const resServices = await DiscountServices.getAllDiscountByEXPAsync(query);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
 exports.getDiscountOfTourAsync = async (req, res, next) => {
 	try {
 		const resServices = await DiscountServices.getDiscountOfTourAsync(req.body.idTour);

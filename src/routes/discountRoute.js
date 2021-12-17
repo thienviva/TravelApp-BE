@@ -10,6 +10,7 @@ const jwtServices = require("../services/jwt.services")
 
 router.get('/getOneDiscount', Controller.getOneDiscountAsync)
 router.get('/getAllDiscount', Controller.getAllDiscountAsync)
+router.get('/getAllDiscountByEXP', Controller.getAllDiscountByEXPAsync)
 router.get('/getDiscountOfTour', Controller.getDiscountOfTourAsync)
 router.post('/createDiscount',jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateDiscount.createDiscount), Controller.createDiscountAsync)
 router.put('/updateDiscount', jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateDiscountAsync)

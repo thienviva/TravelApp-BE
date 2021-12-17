@@ -18,6 +18,48 @@ exports.getOneDiscountAsync = async (id) => {
     }
 };
 
+exports.getAllDiscountByEXPAsync = async body => {
+    try {
+        const { skip, limit } = body;
+        const currentDate = new Date();
+        let startTimeByDay = new Date(currentDate).setHours(00, 00, 00, 000);
+        const discount = await DISCOUNT.find({
+            endDiscount: {
+                $gte: startTimeByDay,
+            }
+        }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        var dataDiscount =[];
+
+        for(let i =0;i<discount.length;i++){
+            var tour = await TOUR.findOne({ _id: discount[i].idTour });
+            var data ={
+                _id:discount[i]._id,
+                idTour:discount[i].idTour,
+                code:discount[i].code,
+                discount:discount[i].discount,
+                startDiscount:discount[i].startDiscount,
+                endDiscount:discount[i].endDiscount,
+                status:discount[i].status,
+                nameTour:tour.name,
+                imageTour:tour.imagesTour[0],
+                tour: tour,
+            }
+             dataDiscount.push(data)
+        }
+    
+        return {
+            message: 'Successfully Get All Discount By EXP',
+            success: true,
+            data: dataDiscount
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
 exports.getAllDiscountAsync = async () => {
     try {
         const discount = await DISCOUNT.find();
