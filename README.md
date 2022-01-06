@@ -15,8 +15,6 @@ Link: https://drive.google.com/drive/folders/1ltjuLVn-BZ02mpUCoiirOGrzhrMZn0nj?u
 Deploy: http://be-travel.herokuapp.com
 Link github code BE: https://github.com/thienviva/TravelApp-BE
 
-●	Cài đặt ngôn ngữ Dart và Flutter (https://dart.dev/get-dart)
-
 ●	Mở VSCode, chọn File – Open folder chọn folder TravelApp-BE
 
 <p align="center">
