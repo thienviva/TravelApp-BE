@@ -14,8 +14,6 @@ Link: https://drive.google.com/drive/folders/1ltjuLVn-BZ02mpUCoiirOGrzhrMZn0nj?u
 #### Backend :rocket: :rocket: :octocat:
 Deploy: http://be-travel.herokuapp.com
 Link github code BE: https://github.com/thienviva/TravelApp-BE
-#### Frontend :rocket: :rocket: :octocat:
-##### Flutter
 
 ●	Cài đặt ngôn ngữ Dart và Flutter (https://dart.dev/get-dart)
 
