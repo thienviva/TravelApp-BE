@@ -43,7 +43,7 @@ const socket = require('./socket');
 
 global.io = require('socket.io').listen(server);
 
-// socket.init();
+socket.init;
 
 
 server.listen(PORT, () => {
