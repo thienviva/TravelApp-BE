@@ -11,6 +11,10 @@ const schemas = {
 		email: joi.string().required(),
 		password: joi.string().required()
 	}),
+	loginGoogle: joi.object().keys({
+		email: joi.string().required(),
+		name: joi.string().required()
+	}),
 	changePass: joi.object().keys({
 		oldPassword: joi.string().required(),
 		newPassword: joi.string().required()

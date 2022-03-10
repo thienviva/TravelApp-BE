@@ -69,6 +69,60 @@ exports.registerUserAsync = async body => {
 	}
 };
 
+
+exports.loginwithGoogleAsync = async (body) => {
+	try {
+	  const { email, name } = body;
+	  const user = await USER.findOne({
+		email: email,
+	  });
+	 
+	  var generateToken;
+	  if (user) {
+		 generateToken = await jwtServices.createToken({
+		  id: user._id,
+		  role: user.role,
+		});
+		return {
+		  message: "Successfully login",
+		  success: true,
+		  data: {
+			token: generateToken,
+			user: user,
+		  },
+		};
+	  } else {
+		const newUser = new USER({
+		  email: email,
+		  name: name,
+		});
+	  
+		await newUser.save();
+	   
+	  }
+	  generateToken = await jwtServices.createToken({
+		id: user._id,
+		role: user.role,
+	  });
+
+	  return {
+		message: "Successfully login google",
+		success: true,
+	   
+		data: {
+		  token: generateToken,
+		  user: user,
+		},
+	  };
+	} catch (err) {
+	  console.log(err);
+	  return {
+		message: "An error occurred",
+		success: false,
+	  };
+	}
+  };
+
 exports.editProfileAsync = async (id, body) => {
 	try {
 		const user = await USER.findOneAndUpdate({ _id: id }, body, { new: true });

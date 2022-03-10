@@ -32,6 +32,23 @@ exports.registerAsync = async (req, res, next) => {
 	}
 };
 
+
+exports.loginwithGoogleAsync = async (req,res,next)=>{
+	try{
+		const resServices = await userServices.loginwithGoogleAsync(req.value.body);
+		controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+	}
+	catch(err){
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
+
 // exports.registerAdminAsync = async (req, res, next) => {
 // 	try {
 // 		const resServices = await userServices.registerAdminAsync(req.value.body);

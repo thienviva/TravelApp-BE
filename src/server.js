@@ -39,7 +39,7 @@ app.get('/healCheck', (req, res) => res.status(200).json({hello : 'Welcome to Tr
 app.get('/*', (req, res) => res.send({message: 'cannot access route'}))
 
 
-// const socket = require('./socket');
+const socket = require('./socket');
 
 global.io = require('socket.io').listen(server);
 
