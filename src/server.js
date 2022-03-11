@@ -41,9 +41,28 @@ app.get('/*', (req, res) => res.send({message: 'cannot access route'}))
 
 const socket = require('./socket');
 
-global.io = require('socket.io').listen(server);
+const socketIO= require('socket.io').listen(server);
 
-socket.init;
+// const socketIO = require('socket.io')(server)
+
+socketIO.on('connection', function (client) {
+  console.log('Connected...', client.id);
+
+  client.on('message', function name(data) {
+    console.log(data);
+    socketIO.emit('message', data);
+  })
+
+  client.on('disconnect', function () {
+    console.log('Disconnected...', client.id);
+  })
+
+  client.on('error', function (err) {
+    console.log('Error detected', client.id);
+    console.log(err);
+  })
+})
+
 
 
 server.listen(PORT, () => {
