@@ -6,30 +6,43 @@ const { configEnv } = require("../config");
 // const DEVICE = require("../models/Device.model");
 const USER = require("../models/User.model");
 
+const server = require("http").createServer();
+const socketIO = require("socket.io")(server);
+
+exports.findUserById = (socketId) => {
+  return global.listUser.find((e) => {
+    return e.socket === socketId;
+  });
+};
+
+global.listUser = [];
 
 
-const server = require('http').createServer()
-const socketIO = require('socket.io')(server)
+socketIO.on("connection", function (client) {
+  console.log("Connected...", client.id);
+  console.log(client.id + 'hello')
+  client.on("joinroom", (data) =>
+    chatSockreet.joinRoom(client, data)
+  );
 
-socketIO.on('connection', function (client) {
-  console.log('Connected...', client.id);
-
-  client.on('message', function name(data) {
+  client.on("message", function name(data) {
     console.log(data);
-    socketIO.emit('message', data);
-  })
+    socketIO.emit("message", data);
+  });
 
-  client.on('disconnect', function () {
-    console.log('Disconnected...', client.id);
-  })
+  client.on("disconnect", function () {
+    console.log("Disconnected...", client.id);
+  });
 
-  client.on('error', function (err) {
-    console.log('Error detected', client.id);
+  client.on("error", function (err) {
+    console.log("Error detected", client.id);
     console.log(err);
-  })
-})
+  });
+});
 
-
+// socket.on(defaultChatSocket.joinRoomCSS, (data) =>
+// chatSocket.joinRoom(socket, data)
+// );
 
 // exports.emitToSocketId = (socketId, eventName, data) => {
 //   console.log(`Emit ${eventName}`, socketId, data);

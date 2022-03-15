@@ -1,22 +1,22 @@
-// const { defaultChatSocket } = require('../config/defineModel');
-// const chatService = require('../services/chat.service');
-// const sockets = require('./index');
-// const USER = require('../models/User.model');
+const { defaultChatSocket } = require('../config/defineModel');
+const chatService = require('../services/message.service');
+const sockets = require('./index');
+const USER = require('../models/User.model');
 // const ACCOUNT = require('../models/Account.model');
-// const ROOM = require('../models/Room.model');
+const ROOM = require('../models/Room.model');
 // const DEVICE = require('../models/Device.model');
 // const { pushNotification, pushMultipleNotification } = require('../services/fcmNotify');
-// const { convertObjectFieldString } = require('../helper');
-// exports.joinRoom = async (socket, data) => {
-// 	console.log('Join Room');
-// 	const { idAccount } = data;
-// 	console.log('Room: ', idAccount);
-// 	socket.Room = idAccount;
-// 	socket.join(idAccount);
-// 	const user = sockets.findUserById(socket.id);
-//   console.log(user)
-// 	await chatService.updateSendByUser(user.userId);
-// };
+const { convertObjectFieldString } = require('../helper');
+exports.joinRoom = async (socket, data) => {
+	console.log('Join Room');
+	const { idAccount } = data;
+	console.log('Room: ', idAccount);
+	socket.Room = idAccount;
+	socket.join(idAccount);
+	const user = sockets.findUserById(socket.id);
+  console.log(user)
+	// await chatService.updateSendByUser(user.userId);
+};
 // exports.leaveRoom = (socket, data) => {
 // 	console.log('Leave Room');
 // 	const { idAccount } = data;
