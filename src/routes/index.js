@@ -14,6 +14,7 @@ const paymentRoute = require('./paymentRoute')
 const vnpaymentRoute = require('./vnpaymentRoute')
 const adminRoute = require('./adminRouter')
 const statisticRoute = require('./statisticRouter')
+const chatRoute = require('./chatRoute');
 
 const router = express.Router()
 router.use('/user', useRoute)
@@ -31,7 +32,7 @@ router.use('/payment', paymentRoute)
 router.use('/vnpayment', vnpaymentRoute)
 router.use('/admin', adminRoute)
 router.use('/statistic', statisticRoute)
-
+router.use('/chat', chatRoute);
 
 
 

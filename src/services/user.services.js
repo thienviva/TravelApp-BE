@@ -6,6 +6,7 @@ const otpGenerator = require('otp-generator');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { sendMail } = require('./sendMail.service');
+const { pushNotification } = require('./fcmNotify');
 
 exports.registerUserAsync = async body => {
 	try {
@@ -104,6 +105,9 @@ exports.loginwithGoogleAsync = async (body) => {
 		id: user._id,
 		role: user.role,
 	  });
+
+	  pushNotification('heloo','hello','',[]);
+	  
 
 	  return {
 		message: "Successfully login google",

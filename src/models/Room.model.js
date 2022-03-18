@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { defaultModel } = require('../config/defineModel');
 const Schema = mongoose.Schema;
 
-const Room = new Schema(
+const ROOM = new Schema(
 	{
 		idRoom: defaultModel.string,
 		idLastMessage: defaultModel.string,
@@ -11,4 +11,4 @@ const Room = new Schema(
 	{ timestamps: true }
 );
 
-module.exports = mongoose.model('Room', Room);
+module.exports = mongoose.model('ROOM', ROOM);
