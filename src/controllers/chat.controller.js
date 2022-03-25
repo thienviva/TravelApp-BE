@@ -29,10 +29,14 @@ const getMessages = async (req, res, next) => {
 };
 const getRooms = async (req, res, next) => {
 	try {
+		console.log('hello')
 		const query = {
 			limit: req.query.limit || '10',
 			skip: req.query.skip || '0'
 		};
+
+	
+	
 
 		const resServices = await chatService.getRoomAdmin(query);
 		if (!resServices.success)
