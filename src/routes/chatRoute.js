@@ -10,7 +10,7 @@ router.get('/getMessage', jwtServices.verify, Controller.getMessages);
 router.get(
 	'/getRoom',
 	jwtServices.verify,
-
+	checkRole([defaultRoles.Admin]),
 	Controller.getRooms
 );
 
