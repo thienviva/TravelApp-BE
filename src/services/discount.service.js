@@ -184,3 +184,45 @@ exports.deleteForceDiscountAsync = async (id) => {
         };
     }
 };
+
+exports.getAllDiscountOfTourByEXPAsync = async (idTour) => {
+    try {
+        const currentDate = new Date();
+        let startTimeByDay = new Date(currentDate).setHours(00, 00, 00, 000);
+        const discount = await DISCOUNT.find({
+            idTour: idTour,
+            endDiscount: {
+                $gte: startTimeByDay,
+            }
+        });
+        var dataDiscount =[];
+        var tour = await TOUR.findOne({ _id: idTour });
+        for(let i =0;i<discount.length;i++){
+            var data ={
+                _id:discount[i]._id,
+                idTour:discount[i].idTour,
+                code:discount[i].code,
+                discount:discount[i].discount,
+                startDiscount:discount[i].startDiscount,
+                endDiscount:discount[i].endDiscount,
+                status:discount[i].status,
+                nameTour:tour.name,
+                imageTour:tour.imagesTour[0],
+                tour: tour,
+            }
+            dataDiscount.push(data)
+        }
+    
+        return {
+            message: 'Successfully Get All Discount Of Tour By EXP',
+            success: true,
+            data: dataDiscount
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};

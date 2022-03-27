@@ -17,7 +17,7 @@ router.put('/updateDiscount', jwtServices.verify, checkRole([defaultRoles.Admin]
 router.delete('/deleteDiscount',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteDiscountAsync)
 router.delete('/deleteForceDiscount',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceDiscountAsync)
 router.post('/userUsedDiscount', Controller.userUsedDiscountAsync)
-
+router.get('/getDiscountOfTourByEXP', Controller.getAllDiscountOfTourByEXPAsync)
 
 
 module.exports = router
