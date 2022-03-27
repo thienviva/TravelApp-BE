@@ -8,7 +8,7 @@ exports.convertObjectFieldString = (obj = {}) => {
   }, {})
 }
 
-exports.paymentMethod = async (name, price, idUser, idTour,startDate,endDate, next) => {
+exports.paymentMethod = async (name, price, idUser, idTour, startDate, endDate, next) => {
   const create_payment_json = {
     intent: "sale",
     payer: {
@@ -17,6 +17,43 @@ exports.paymentMethod = async (name, price, idUser, idTour,startDate,endDate, ne
     redirect_urls: {
       // return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
       return_url: `https://fe-travelapp.vercel.app/booktour/payment?price=${price}&idUser=${idUser}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`,
+      cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
+    },
+    transactions: [
+      {
+        item_list: {
+          items: [
+            {
+              name: "Thanh toán Tour: "+ name,
+              sku: "001",
+              price: `${price}`,
+              currency: "USD",
+              quantity: 1,
+            },
+          ],
+        },
+        amount: {
+          currency: "USD",
+          total: `${price}`,
+        },
+        description: "Phí thanh toán ở TRAVEL",
+      },
+    ],
+  };
+  paypal.payment.create(create_payment_json, async (error, payment) => {
+    await next(error, payment);
+  });
+}
+
+exports.paymentMethodDiscount = async (name, price, idUser, idTour, startDate, endDate, idDiscount, next) => {
+  const create_payment_json = {
+    intent: "sale",
+    payer: {
+      payment_method: "paypal",
+    },
+    redirect_urls: {
+      // return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
+      return_url: `https://fe-travelapp.vercel.app/booktour/payment?price=${price}&idUser=${idUser}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}&idDiscount=${idDiscount}`,
       cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
     },
     transactions: [

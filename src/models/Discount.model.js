@@ -10,6 +10,7 @@ const Discount = new Schema({
     status:defaultModel.number,
     startDiscount: defaultModel.date,
     endDiscount: defaultModel.date,
+    used: defaultModel.array,
 }, { timestamps: true })
 
 Discount.plugin(mongooseDelete);

@@ -10,7 +10,7 @@ const BOOKTOUR = require("../models/BookTour.model");
 const USER = require("../models/User.model");
 const DISCOUNT = require("../models/Discount.model");
 const paypal = require("paypal-rest-sdk");
-const { paymentMethod, sortObject } = require("../helper");
+const { paymentMethod, sortObject, paymentMethodDiscount } = require("../helper");
 const { start } = require("repl");
 exports.bookTourAsync = async (req, res, next) => {
   try {
@@ -167,7 +167,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         );
       } else {
         var today = new Date();
-        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
+        if (discount == null || discount.used.includes(userId) || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
           return controller.sendSuccess(
             res,
             null,
@@ -186,7 +186,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
           // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
-          var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
+          var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}&idDiscount=${discount._id}`;
 
           var date = new Date();
 
@@ -254,6 +254,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
       var resultPayment;
       startDate = new Date(startDate).toISOString().slice(0, 10);
       endDate = new Date(endDate).toISOString().slice(0, 10);
+      const idDiscount = discount._id;
       if (req.value.body.codediscount == "") {
         console.log(startDate);
         console.log(endDate);
@@ -286,7 +287,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         );
       } else {
         var today = new Date();
-        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
+        if (discount == null || discount.used.includes(userId) || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
           return controller.sendSuccess(
             res,
             null,
@@ -299,13 +300,14 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             (tour.payment - (tour.payment * discount.discount) / 100) /
             23000
           ).toFixed(1);
-          paymentMethod(
+          paymentMethodDiscount(
             tour.name,
             finalpayment,
             userId,
             idTour,
             startDate,
             endDate,
+            idDiscount,
             async function (error, payment) {
               if (error) {
                 resultPayment = error;
@@ -349,6 +351,7 @@ exports.paymentPayPal = async (req, res, next) => {
   const idTour = req.query.idTour;
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const idDiscount = req.query.idDiscount;
   const execute_payment_json = {
     payer_id: payerId,
     transactions: [
@@ -372,6 +375,19 @@ exports.paymentPayPal = async (req, res, next) => {
           idTour: idTour,
           status: defaultBookTour.AWAIT,
         });
+
+        var discount = await DISCOUNT.findOne({ _id: idDiscount });
+        if(discount != null)
+        {
+          var used = discount.used;
+          used.push(idUser);
+          var usedDiscount = await DISCOUNT.findOneAndUpdate(
+            { _id: idDiscount },
+            { used: used },
+            { new: true }
+          );
+        }
+
         if (booktour != null) {
           var resultBookTour = await BOOKTOUR.findOneAndUpdate(
             { idUser: idUser, idTour: idTour, status: defaultBookTour.AWAIT },
@@ -416,10 +432,12 @@ exports.paymentVNPay = async (req, res, next) => {
   const idTour = req.query.idTour;
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const idDiscount = req.query.idDiscount;
   delete req.query.idUser;
   delete req.query.idTour;
   delete req.query.startDate;
   delete req.query.endDate;
+  delete req.query.idDiscount;
   var vnp_Params = req.query;
 
   var secureHash = vnp_Params["vnp_SecureHash"];
@@ -446,6 +464,20 @@ exports.paymentVNPay = async (req, res, next) => {
       idTour: idTour,
       status: defaultBookTour.AWAIT,
     });
+
+    console.log(idDiscount);
+    var discount = await DISCOUNT.findOne({ _id: idDiscount });
+    if(discount != null)
+    {
+      var used = discount.used;
+      used.push(idUser);
+      var usedDiscount = await DISCOUNT.findOneAndUpdate(
+        { _id: idDiscount },
+        { used: used },
+        { new: true }
+      );
+    }
+
     if (booktour != null) {
       var resultBookTour = await BOOKTOUR.findOneAndUpdate(
         { idUser: idUser, idTour: idTour, status: defaultBookTour.AWAIT },
@@ -701,8 +733,8 @@ exports.getUserBookTourAsync = async (req, res, next) => {
 exports.getUserBookTourByDateAsync = async (req, res, next) => {
   try {
     let query = {
-      dateStart : req.query.dateStart || "",
-      dateEnd : req.query.dateEnd || "",
+      dateStart: req.query.dateStart || "",
+      dateEnd: req.query.dateEnd || "",
     };
     const { decodeToken } = req.value.body;
     const userId = decodeToken.data.id;
