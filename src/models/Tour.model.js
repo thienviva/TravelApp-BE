@@ -8,6 +8,8 @@ const Tour = new Schema({
     idVehicles: defaultModel.array,
     name:defaultModel.stringR,
     place:defaultModel.stringR,
+    latitude:defaultModel.string,
+    longtitude:defaultModel.string,
     detail:defaultModel.string,
     time: defaultModel.string,
     payment: defaultModel.number,
