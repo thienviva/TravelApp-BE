@@ -79,7 +79,7 @@ exports.loginwithGoogleAsync = async (body) => {
 	  });
 	 
 	  var generateToken;
-	  if (user) {
+	  if (!user) {
 		 generateToken = await jwtServices.createToken({
 		  id: user._id,
 		  role: user.role,
