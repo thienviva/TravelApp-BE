@@ -33,7 +33,7 @@ exports.chatMessage = async (socket, data) => {
 		const admin = await USER.findOne({
 			role: 1
 		});
-    // console.log("admin")
+    console.log("admin")
     console.log(admin);
     let obj;
     if(user.role == 0)
