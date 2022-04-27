@@ -254,7 +254,6 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
       var resultPayment;
       startDate = new Date(startDate).toISOString().slice(0, 10);
       endDate = new Date(endDate).toISOString().slice(0, 10);
-      const idDiscount = discount._id;
       if (req.value.body.codediscount == "") {
         console.log(startDate);
         console.log(endDate);
@@ -286,6 +285,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           }
         );
       } else {
+        const idDiscount = discount._id;
         var today = new Date();
         if (discount == null || discount.used.includes(userId) || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
           return controller.sendSuccess(
