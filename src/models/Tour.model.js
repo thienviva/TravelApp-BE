@@ -6,17 +6,17 @@ const mongooseDelete = require("mongoose-delete");
 const Tour = new Schema({
     idEnterprise: defaultModel.string,
     idVehicles: defaultModel.array,
-    name:defaultModel.stringR,
-    place:defaultModel.stringR,
-    latitude:defaultModel.string,
-    longtitude:defaultModel.string,
-    detail:defaultModel.string,
+    name: defaultModel.stringR,
+    place: defaultModel.stringR,
+    latitude: defaultModel.string,
+    longtitude: defaultModel.string,
+    detail: defaultModel.string,
     time: defaultModel.string,
     payment: defaultModel.number,
-    imagesTour:defaultModel.array,
-    star:defaultModel.number,
-    category:defaultModel.number,
-    status:defaultModel.number
+    imagesTour: defaultModel.array,
+    star: defaultModel.number,
+    category: defaultModel.number,
+    status: defaultModel.number
 }, { timestamps: true })
 
 

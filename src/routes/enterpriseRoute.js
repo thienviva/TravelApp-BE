@@ -9,23 +9,21 @@ const jwtServices = require("../services/jwt.services")
 const path = require("path");
 var multer = require("multer");
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/");
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + "-" + Date.now() + Math.floor(Math.random() * 100) + path.extname(file.originalname));
-    },
-  });
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now() + Math.floor(Math.random() * 100) + path.extname(file.originalname));
+  },
+});
 const upload = multer({ storage: storage });
 var cpUpload = upload.fields([{ name: 'Logo', maxCount: 100 }]);
 
-
 router.get('/getOneEnterprise', Controller.getOneEnterpriseAsync)
 router.get('/getAllEnterprise', Controller.getAllEnterpriseAsync)
-router.post('/createEnterprise',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateEnterprise.createEnterprise), Controller.createEnterpriseAsync)
-router.put('/updateEnterprise', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateEnterpriseAsync)
-router.delete('/deleteEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteEnterpriseAsync)
-router.delete('/deleteForceEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceEnterpriseAsync)
-
+router.post('/createEnterprise', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateEnterprise.createEnterprise), Controller.createEnterpriseAsync)
+router.put('/updateEnterprise', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.updateEnterpriseAsync)
+router.delete('/deleteEnterprise', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteEnterpriseAsync)
+router.delete('/deleteForceEnterprise', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceEnterpriseAsync)
 
 module.exports = router

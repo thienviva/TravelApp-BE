@@ -4,7 +4,7 @@ const schemas = {
         idTour: joi.string().required(),
         star: joi.number().required(),
         comment: joi.string().required(),
-        imagesReview:joi.array(),
+        imagesReview: joi.array(),
     }),
 };
 module.exports = schemas;

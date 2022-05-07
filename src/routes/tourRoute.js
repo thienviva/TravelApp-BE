@@ -19,7 +19,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 var cpUpload = upload.fields([{ name: 'ImagesTour', maxCount: 100 }]);
 
-
 router.get('/getOneTour', Controller.getOneTourAsync)
 router.get('/getAllTour', Controller.getAllTourAsync)
 router.get('/getAllTourWithDeleted', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.getAllTourWithDeletedAsync)
@@ -31,8 +30,7 @@ router.delete('/deleteForceTour',jwtServices.verify, checkRole([defaultRoles.Adm
 router.get('/findTourByName', Controller.findTourByNameAsync)
 router.get('/findTourByCategory', Controller.findTourByCategoryAsync)
 router.get('/findAllTourByCategory', Controller.findAllTourByCategoryAsync)
+router.get('/findTourByTotalDates', Controller.findTourByTotalDatesAsync)
 router.get('/getPageNumbers', Controller.getPageNumbersAsync)
-
-
 
 module.exports = router

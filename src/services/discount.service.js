@@ -28,25 +28,25 @@ exports.getAllDiscountByEXPAsync = async body => {
                 $gte: startTimeByDay,
             }
         }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
-        var dataDiscount =[];
+        var dataDiscount = [];
 
-        for(let i =0;i<discount.length;i++){
+        for (let i = 0; i < discount.length; i++) {
             var tour = await TOUR.findOne({ _id: discount[i].idTour });
-            var data ={
-                _id:discount[i]._id,
-                idTour:discount[i].idTour,
-                code:discount[i].code,
-                discount:discount[i].discount,
-                startDiscount:discount[i].startDiscount,
-                endDiscount:discount[i].endDiscount,
-                status:discount[i].status,
-                nameTour:tour.name,
-                imageTour:tour.imagesTour[0],
+            var data = {
+                _id: discount[i]._id,
+                idTour: discount[i].idTour,
+                code: discount[i].code,
+                discount: discount[i].discount,
+                startDiscount: discount[i].startDiscount,
+                endDiscount: discount[i].endDiscount,
+                status: discount[i].status,
+                nameTour: tour.name,
+                imageTour: tour.imagesTour[0],
                 tour: tour,
             }
-             dataDiscount.push(data)
+            dataDiscount.push(data)
         }
-    
+
         return {
             message: 'Successfully Get All Discount By EXP',
             success: true,
@@ -63,25 +63,25 @@ exports.getAllDiscountByEXPAsync = async body => {
 exports.getAllDiscountAsync = async () => {
     try {
         const discount = await DISCOUNT.find();
-        var dataDiscount =[];
+        var dataDiscount = [];
 
-        for(let i =0;i<discount.length;i++){
+        for (let i = 0; i < discount.length; i++) {
             var tour = await TOUR.findOne({ _id: discount[i].idTour });
-            var data ={
-                _id:discount[i]._id,
-                idTour:discount[i].idTour,
-                code:discount[i].code,
-                discount:discount[i].discount,
-                startDiscount:discount[i].startDiscount,
-                endDiscount:discount[i].endDiscount,
-                status:discount[i].status,
-                nameTour:tour.name,
-                imageTour:tour.imagesTour[0],
+            var data = {
+                _id: discount[i]._id,
+                idTour: discount[i].idTour,
+                code: discount[i].code,
+                discount: discount[i].discount,
+                startDiscount: discount[i].startDiscount,
+                endDiscount: discount[i].endDiscount,
+                status: discount[i].status,
+                nameTour: tour.name,
+                imageTour: tour.imagesTour[0],
                 tour: tour,
             }
-             dataDiscount.push(data)
+            dataDiscount.push(data)
         }
-    
+
         return {
             message: 'Successfully Get All Discount',
             success: true,
@@ -174,7 +174,7 @@ exports.deleteForceDiscountAsync = async (id) => {
         return {
             message: 'Successfully Delete forever Discount',
             success: true,
-          
+
         };
     } catch (e) {
         console.log(e);
@@ -195,24 +195,24 @@ exports.getAllDiscountOfTourByEXPAsync = async (idTour) => {
                 $gte: startTimeByDay,
             }
         });
-        var dataDiscount =[];
+        var dataDiscount = [];
         var tour = await TOUR.findOne({ _id: idTour });
-        for(let i =0;i<discount.length;i++){
-            var data ={
-                _id:discount[i]._id,
-                idTour:discount[i].idTour,
-                code:discount[i].code,
-                discount:discount[i].discount,
-                startDiscount:discount[i].startDiscount,
-                endDiscount:discount[i].endDiscount,
-                status:discount[i].status,
-                nameTour:tour.name,
-                imageTour:tour.imagesTour[0],
+        for (let i = 0; i < discount.length; i++) {
+            var data = {
+                _id: discount[i]._id,
+                idTour: discount[i].idTour,
+                code: discount[i].code,
+                discount: discount[i].discount,
+                startDiscount: discount[i].startDiscount,
+                endDiscount: discount[i].endDiscount,
+                status: discount[i].status,
+                nameTour: tour.name,
+                imageTour: tour.imagesTour[0],
                 tour: tour,
             }
             dataDiscount.push(data)
         }
-    
+
         return {
             message: 'Successfully Get All Discount Of Tour By EXP',
             success: true,

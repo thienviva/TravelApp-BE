@@ -104,7 +104,7 @@ exports.getRoomAdmin = async body => {
 			})
 			.skip(Number(skip))
 			.limit(Number(limit));
-		
+
 		let arrResult = [];
 		for (let i = 0; i < getRoomByAdmin.length; i++) {
 			let chat = await CHAT.findById(getRoomByAdmin[i].idLastMessage);

@@ -3,9 +3,9 @@ const schemas = {
 	register: joi.object().keys({
 		email: joi.string().required(),
 		password: joi.string().required(),
-		phone:joi.string().required(),
-		name:joi.string().required(),
-		address:joi.string().required(),
+		phone: joi.string().required(),
+		name: joi.string().required(),
+		address: joi.string().required(),
 	}),
 	login: joi.object().keys({
 		email: joi.string().required(),
@@ -22,19 +22,19 @@ const schemas = {
 	resetPassword: joi.object().keys({
 		email: joi.string().required(),
 		password: joi.string().required(),
-		otp:joi.string().required()
+		otp: joi.string().required()
 	}),
 	editProfile: joi.object().keys({
 		name: joi.string(),
-		address:joi.string(),
-		phone:joi.string(),
+		address: joi.string(),
+		phone: joi.string(),
 	}),
-	updateAvatar:joi.object().keys({
-		avatar:joi.string(),
+	updateAvatar: joi.object().keys({
+		avatar: joi.string(),
 	}),
-	verifyUser:joi.object().keys({
+	verifyUser: joi.object().keys({
 		email: joi.string().required(),
-		otp:joi.string().required()
+		otp: joi.string().required()
 	}),
 };
 module.exports = schemas;

@@ -13,7 +13,7 @@ exports.joinRoom = async (socket, data) => {
 	socket.Room = idUser;
 	socket.join(idUser);
 	const user = sockets.findUserById(socket.id);
-  console.log(user)
+	console.log(user)
 	await chatService.updateSendByUser(user.userId);
 };
 exports.leaveRoom = (socket, data) => {
@@ -33,48 +33,44 @@ exports.chatMessage = async (socket, data) => {
 		const admin = await USER.findOne({
 			role: 1
 		});
-    console.log("admin")
-    console.log(admin);
-    let obj;
-    if(user.role == 0)
-    {
-      obj= Object.assign(data, {
-        creatorUser: user.userId,
-        seenByUser: [user.userId],
+		console.log("admin")
+		console.log(admin);
+		let obj;
+		if (user.role == 0) {
+			obj = Object.assign(data, {
+				creatorUser: user.userId,
+				seenByUser: [user.userId],
 				idRoom: socket.Room
-      });
-    }
-    else if(user.role ==1)
-    {
-      obj= Object.assign(data, {
-        creatorUser: user.userId,
-        seenByUser: [user.userId],
+			});
+		}
+		else if (user.role == 1) {
+			obj = Object.assign(data, {
+				creatorUser: user.userId,
+				seenByUser: [user.userId],
 				idRoom: socket.Room
-      });
-    }
+			});
+		}
 		console.log(obj);
 		const message = await chatService.createChat(obj);
-    console.log("message");
-    console.log(message);
+		console.log("message");
+		console.log(message);
 		const userRoom = await USER.findById(socket.Room);
 		sockets.emitRoom(
 			socket.Room,
 			defaultChatSocket.sendMessageSSC,
 			message.data
 		);
-		const room = await ROOM.findOne({idRoom: socket.Room})
+		const room = await ROOM.findOne({ idRoom: socket.Room })
 
-		if(room!= null)
-		{
+		if (room != null) {
 			room.idLastMessage = message.data._id
 			await room.save();
 		}
-		else
-		{
+		else {
 			var bodyRoom = {
 				idRoom: socket.Room,
-				idLastMessage:message.data._id,
-				name:  userRoom.name
+				idLastMessage: message.data._id,
+				name: userRoom.name
 			}
 			await ROOM.create(bodyRoom);
 		}
@@ -98,10 +94,10 @@ exports.chatMessage = async (socket, data) => {
 				return val.fcm;
 			})
 
-			pushMultipleNotification(`Tin nhắn từ ${user1.email}`,`${message.data.message}`,'',datafcm,newArr);
+			pushMultipleNotification(`Tin nhắn từ ${user1.email}`, `${message.data.message}`, '', datafcm, newArr);
 		} else if (user.role === 1) {
 			//Admin
-			const deviceUser = await DEVICE.find({creatorUser: socket.Room});
+			const deviceUser = await DEVICE.find({ creatorUser: socket.Room });
 			const datafcm = convertObjectFieldString(
 				Object.assign(dataMessage)
 			);
@@ -109,8 +105,8 @@ exports.chatMessage = async (socket, data) => {
 			var newArr = deviceUser.map((val) => {
 				return val.fcm;
 			})
-			
-			pushMultipleNotification(`CSKH Trực Tuyến`,`${message.data.message}`,'',datafcm,newArr);
+
+			pushMultipleNotification(`CSKH Trực Tuyến`, `${message.data.message}`, '', datafcm, newArr);
 		}
 	} else {
 		sockets.emitToSocketId(socket.id, defaultChatSocket.sendMessageSSC, {

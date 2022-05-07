@@ -3,7 +3,7 @@ const schemas = {
 	createEnterprise: joi.object().keys({
 		name: joi.string().required(),
 		type: joi.number(),
-        detail: joi.string().required(),
+		detail: joi.string().required(),
 		logo: joi.string(),
 	}),
 };

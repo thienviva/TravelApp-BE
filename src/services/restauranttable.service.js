@@ -93,7 +93,6 @@ exports.deleteRestaurantTableAsync = async (id) => {
         return {
             message: 'Successfully Delete RestaurantTable',
             success: true,
-  
         };
     } catch (e) {
         console.log(e);
@@ -110,7 +109,6 @@ exports.deleteForceRestaurantTableAsync = async (id) => {
         return {
             message: 'Successfully Delete forever RestaurantTable',
             success: true,
-           
         };
     } catch (e) {
         console.log(e);

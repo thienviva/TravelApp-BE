@@ -11,9 +11,9 @@ exports.createHistoryAsync = async (req, res, next) => {
     req.value.body.paymentStatus = 1;
 
     const tours = req.value.body.tours;
-   
+
     for (let i = 0; i < tours.length; i++) {
-		var tour = await TOUR.findOne({ _id: tours[i] });
+      var tour = await TOUR.findOne({ _id: tours[i] });
       if (tour == null) {
         return controller.sendSuccess(res, null, 404, "Tour does not exist");
       }
@@ -102,80 +102,80 @@ exports.deleteForceHistoryAsync = async (req, res, next) => {
 
 
 exports.getAllHistoryAsync = async (req, res, next) => {
-    try {
-        const resServices = await HistoryServices.getAllHistoryAsync();
-        if (resServices.success) {
-            return controller.sendSuccess(
-                res,
-                resServices.data,
-                200,
-                resServices.message
-            );
-        }
-        return controller.sendSuccess(
-            res,
-            resServices.data,
-            300,
-            resServices.message
-        );
-    } catch (error) {
-        // bug
-        console.log(error);
-        return controller.sendError(res);
+  try {
+    const resServices = await HistoryServices.getAllHistoryAsync();
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
     }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
 };
 
 
 exports.getOneHistoryAsync = async (req, res, next) => {
-    try {
-        const resServices = await HistoryServices.getOneHistoryAsync(req.query.id);
-        if (resServices.success) {
-            return controller.sendSuccess(
-                res,
-                resServices.data,
-                200,
-                resServices.message
-            );
-        }
-        return controller.sendSuccess(
-            res,
-            resServices.data,
-            300,
-            resServices.message
-        );
-    } catch (error) {
-        // bug
-        console.log(error);
-        return controller.sendError(res);
+  try {
+    const resServices = await HistoryServices.getOneHistoryAsync(req.query.id);
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
     }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
 };
 
 
 
 exports.getMyHistoryAsync = async (req, res, next) => {
-    try {
-		const { decodeToken } = req.value.body;
-		const userId = decodeToken.data.id;
-        const resServices = await HistoryServices.getMyHistoryAsync(userId);
-        if (resServices.success) {
-            return controller.sendSuccess(
-                res,
-                resServices.data,
-                200,
-                resServices.message
-            );
-        }
-        return controller.sendSuccess(
-            res,
-            resServices.data,
-            300,
-            resServices.message
-        );
-    } catch (error) {
-        // bug
-        console.log(error);
-        return controller.sendError(res);
+  try {
+    const { decodeToken } = req.value.body;
+    const userId = decodeToken.data.id;
+    const resServices = await HistoryServices.getMyHistoryAsync(userId);
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
     }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
 };
 
 

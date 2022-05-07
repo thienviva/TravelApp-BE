@@ -5,10 +5,10 @@ const mongooseDelete = require("mongoose-delete");
 
 
 const Vehicle = new Schema({
-    name:defaultModel.stringR,
-    type:defaultModel.number,
-    vehicleNumber:defaultModel.string,
-    imagesVehicle:defaultModel.array,
+    name: defaultModel.stringR,
+    type: defaultModel.number,
+    vehicleNumber: defaultModel.string,
+    imagesVehicle: defaultModel.array,
     status: defaultModel.number
 }, { timestamps: true })
 

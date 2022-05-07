@@ -33,8 +33,8 @@ exports.registerAsync = async (req, res, next) => {
 };
 
 
-exports.loginwithGoogleAsync = async (req,res,next)=>{
-	try{
+exports.loginwithGoogleAsync = async (req, res, next) => {
+	try {
 		const resServices = await userServices.loginwithGoogleAsync(req.value.body);
 		controller.sendSuccess(
 			res,
@@ -43,7 +43,7 @@ exports.loginwithGoogleAsync = async (req,res,next)=>{
 			resServices.message
 		);
 	}
-	catch(err){
+	catch (err) {
 		console.log(err);
 		return controller.sendError(res);
 	}

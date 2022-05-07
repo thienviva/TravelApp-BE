@@ -30,6 +30,7 @@ exports.getOneRestaurantTableAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getAllRestaurantTableAsync = async (req, res, next) => {
     try {
         const resServices = await tableServices.getAllRestaurantTableAsync();
@@ -53,6 +54,7 @@ exports.getAllRestaurantTableAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getTableOfEnterpriseAsync = async (req, res, next) => {
     try {
         const resServices = await tableServices.getTableOfEnterpriseAsync(req.query.idEnterprise);
@@ -76,6 +78,7 @@ exports.getTableOfEnterpriseAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.createRestaurantTableAsync = async (req, res, next) => {
     try {
         const enterprise = await ENTERPRISE.findOne({ _id: req.value.body.idEnterprise });
@@ -116,6 +119,7 @@ exports.createRestaurantTableAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.updateRestaurantTableAsync = async (req, res, next) => {
     try {
         if (req.body.idEnterprise != null) {
@@ -182,7 +186,6 @@ exports.deleteRestaurantTableAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
-
 
 exports.deleteForceRestaurantTableAsync = async (req, res, next) => {
     try {

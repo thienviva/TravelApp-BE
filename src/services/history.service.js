@@ -4,9 +4,7 @@ const TOUR = require("../models/Tour.model");
 exports.createHistoryAsync = async (body) => {
   try {
     const history = new HISTORY(body);
-
     await history.save();
-
     return {
       message: "Successfully Add Tour to history",
       success: true,
@@ -47,7 +45,6 @@ exports.addTourToHistoryAsync = async (id, body) => {
 exports.deleteHistoryAsync = async (id) => {
   try {
     const history = await HISTORY.delete({ _id: id });
-
     return {
       message: "Successfully Delete history",
       success: true,
@@ -64,7 +61,6 @@ exports.deleteHistoryAsync = async (id) => {
 exports.deleteForceHistoryAsync = async (id) => {
   try {
     const history = await HISTORY.deleteOne({ _id: id });
-
     return {
       message: "Successfully Delete forever history",
       success: true,
@@ -105,31 +101,29 @@ exports.getMyHistoryAsync = async (id) => {
         success: true,
       };
     }
-    else{
-      
+    else {
       var arrTour = history.tours;
       var data = [];
-      if(history.tours){
+      if (history.tours) {
 
         for (let i = 0; i < arrTour.length; i++) {
           var tour = await TOUR.findOne({ _id: arrTour[i] });
           data.push(tour);
         }
         console.log(history);
-       return {
-            message: "Successfully get my history",
-            success: true,
-            data: data,
+        return {
+          message: "Successfully get my history",
+          success: true,
+          data: data,
         };
       }
-      else{
+      else {
         return {
           message: "Dont have history",
           success: true,
-        
-      };
+        };
       }
-  
+
     }
   } catch (e) {
     console.log(e);

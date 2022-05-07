@@ -277,7 +277,7 @@ exports.getUserBookTourByDateAsync = async (id, body) => {
                 $gte: currentTime,
                 $lt: endTimeByDay
             },
-            idUser : id
+            idUser: id
         });
         if (listBookTour == null) {
             return {

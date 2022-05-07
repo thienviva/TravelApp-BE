@@ -101,13 +101,13 @@ exports.loginwithGoogleAsync = async (body) => {
       });
 
       await newUser.save();
-	  const googleUser = await USER.findOne({
-		email: email,
-	  });
-	  generateToken = await jwtServices.createToken({
-		id: googleUser._id,
-		role: googleUser.role,
-	  });
+      const googleUser = await USER.findOne({
+        email: email,
+      });
+      generateToken = await jwtServices.createToken({
+        id: googleUser._id,
+        role: googleUser.role,
+      });
     }
 
     return {
@@ -358,6 +358,7 @@ exports.changePasswordAsync = async (id, body) => {
     };
   }
 };
+
 exports.fotgotPassword = async (body) => {
   try {
     const email = body.email;
@@ -371,18 +372,6 @@ exports.fotgotPassword = async (body) => {
       { new: true }
     );
     if (result != null) {
-      // var smtpTransport = nodemailer.createTransport({
-      // 	service: "gmail", //smtp.gmail.com  //in place of service use host...
-      // 	secure: false, //true
-      // 	port: 25, //465
-      // 	auth: {
-      // 		user: configEnv.Email,
-      // 		pass: configEnv.Password,
-      // 	},
-      // 	tls: {
-      // 		rejectUnauthorized: false,
-      // 	},
-      // });
       const mailOptions = {
         to: result.email,
         from: configEnv.Email,
@@ -390,26 +379,6 @@ exports.fotgotPassword = async (body) => {
         text: "Mã OTP của bạn là: " + result.otp,
       };
       const resultSendMail = await sendMail(mailOptions);
-      console.log(resultSendMail);
-      // smtpTransport.sendMail(mailOptions, function (error, response)  {
-      // 	if (error) {
-      // 		console.log(error)
-      // 		 return {
-      // 			message: 'Send Email Failed',
-      // 			success: false
-      // 		};
-      // 	} else {
-      // 		console.log("voo nef")
-      // 		 return {
-      // 			message: 'Send Email Success',
-      // 			success: true
-      // 		};
-      // 	}
-      // });
-      // return {
-      // 	message: 'Send Email Success',
-      // 	success: true
-      // };
       if (!resultSendMail) {
         return {
           message: "Send Email Failed",

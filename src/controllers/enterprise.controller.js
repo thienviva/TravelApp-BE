@@ -29,6 +29,7 @@ exports.getOneEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.getAllEnterpriseAsync = async (req, res, next) => {
 	try {
 		const resServices = await enterpriseServices.getAllEnterpriseAsync();
@@ -52,6 +53,7 @@ exports.getAllEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.createEnterpriseAsync = async (req, res, next) => {
 	try {
 		if (req.files["Logo"] != null) {
@@ -80,6 +82,7 @@ exports.createEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.updateEnterpriseAsync = async (req, res, next) => {
 	try {
 		if (req.files["Logo"] != null) {

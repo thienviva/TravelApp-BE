@@ -34,10 +34,7 @@ const getRooms = async (req, res, next) => {
 			limit: req.query.limit || '10',
 			skip: req.query.skip || '0'
 		};
-
-	
-	
-
+		
 		const resServices = await chatService.getRoomAdmin(query);
 		if (!resServices.success)
 			return controller.sendSuccess(

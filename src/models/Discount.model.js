@@ -4,10 +4,10 @@ const Schema = mongoose.Schema
 const mongooseDelete = require("mongoose-delete");
 
 const Discount = new Schema({
-    idTour:defaultModel.stringR,
-    code:defaultModel.string,
-    discount:defaultModel.number,
-    status:defaultModel.number,
+    idTour: defaultModel.stringR,
+    code: defaultModel.string,
+    discount: defaultModel.number,
+    status: defaultModel.number,
     startDiscount: defaultModel.date,
     endDiscount: defaultModel.date,
     used: defaultModel.array,

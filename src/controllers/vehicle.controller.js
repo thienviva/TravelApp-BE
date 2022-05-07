@@ -17,9 +17,6 @@ exports.getOneVehicleAsync = async (req, res, next) => {
                 resServices.message
             );
         }
-
-
-
         return controller.sendSuccess(
             res,
             resServices.data,
@@ -31,7 +28,6 @@ exports.getOneVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }
 
 exports.getAllVehicleAsync = async (req, res, next) => {
@@ -59,7 +55,6 @@ exports.getAllVehicleAsync = async (req, res, next) => {
     }
 
 }
-
 
 exports.getAllVehicleOfTourAsync = async (req, res, next) => {
     try {
@@ -92,11 +87,11 @@ exports.createVehicleAsync = async (req, res, next) => {
         const Image = req.files["ImagesVehicle"];
         if (Image == null) {
             return controller.sendSuccess(
-				res,
-				null,
-				404,
-				'Image does not exist'
-			);
+                res,
+                null,
+                404,
+                'Image does not exist'
+            );
         }
         var urlImageMain = [];
         for (let i = 0; i < Image.length; i++) {
@@ -108,7 +103,6 @@ exports.createVehicleAsync = async (req, res, next) => {
         req.value.body.imagesVehicle = urlImageMain;
         const resServices = await vehicleServices.createVehicleAsync(req.value.body);
         if (resServices.success) {
-
             return controller.sendSuccess(
                 res,
                 resServices.data,
@@ -199,7 +193,6 @@ exports.deleteForceVehicleAsync = async (req, res, next) => {
     try {
         const resServices = await vehicleServices.deleteForceVehicleAsync(req.query.id);
         if (resServices.success) {
-
             return controller.sendSuccess(
                 res,
                 resServices.data,

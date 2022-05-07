@@ -39,27 +39,16 @@ exports.getAllVehicleAsync = async () => {
     }
 }
 
-
 exports.getAllVehicleOfTourAsync = async (id) => {
     try {
-        const tour =  await TOUR.findById({ _id: id });
-        var dataVehicle =[]
-        
-        for(var i =0;i<tour.idVehicles.length;i++){
-
-            var vehicle = await VEHICLE.findById({_id:tour.idVehicles[i]});
+        const tour = await TOUR.findById({ _id: id });
+        var dataVehicle = []
+        for (var i = 0; i < tour.idVehicles.length; i++) {
+            var vehicle = await VEHICLE.findById({ _id: tour.idVehicles[i] });
             dataVehicle.push(vehicle);
-            // var data = {
-            //     type:vehicle.type,
-            //     vehicleNumber: vehicle.vehicleNumber,
-            //     imagesVehicle:vehicle.imagesVehicle,
-            //     _id:vehicle._id,
-            //     name:vehicle.name,
-
-            // }
         }
         console.log(tour.idVehicles)
-        if(dataVehicle==null){
+        if (dataVehicle == null) {
             return {
                 message: 'Vehicle dont exist',
                 success: false
@@ -80,7 +69,6 @@ exports.getAllVehicleOfTourAsync = async (id) => {
     }
 }
 
-
 exports.createVehicleAsync = async body => {
     try {
         const vehicle = new VEHICLE(body);
@@ -99,7 +87,6 @@ exports.createVehicleAsync = async body => {
         };
     }
 }
-
 
 exports.updateVehicleAsync = async (id, body) => {
     try {
@@ -125,7 +112,6 @@ exports.updateVehicleAsync = async (id, body) => {
     }
 }
 
-
 exports.deleteVehicleAsync = async (id) => {
     try {
         const vehicle = await VEHICLE.delete({ _id: id })
@@ -142,8 +128,6 @@ exports.deleteVehicleAsync = async (id) => {
         };
     }
 }
-
-
 
 exports.deleteForceVehicleAsync = async (id) => {
     try {

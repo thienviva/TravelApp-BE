@@ -16,38 +16,36 @@ const body = (schema) => {
   return (req, res, next) => {
     const validatorResult = schema.validate(req.body);
 
-    if (validatorResult.error)
-    {
+    if (validatorResult.error) {
       console.log(req.body)
       return res.status(400).json(validatorResult.error.details);
     }
     else {
       if (!req.value) req.value = {};
       if (!req.value['body']) req.value.body = {};
-      const obj=Object.assign(req.value.body,validatorResult.value);
-      req.value.body=obj;
+      const obj = Object.assign(req.value.body, validatorResult.value);
+      req.value.body = obj;
       next();
     }
   };
 }
 
 
-const bodySocket=((schema,data)=>{
-  const validatorResult=schema.validate(data)
-  if (validatorResult.error)
-  {
+const bodySocket = ((schema, data) => {
+  const validatorResult = schema.validate(data)
+  if (validatorResult.error) {
     console.log(data)
     return {
-      success:false,
-      data:null,
-      message:validatorResult.error.details
+      success: false,
+      data: null,
+      message: validatorResult.error.details
     }
   }
   else {
     return {
-      success:true,
-      data:validatorResult.value,
-      message:"Successful validate data"
+      success: true,
+      data: validatorResult.value,
+      message: "Successful validate data"
     }
   }
 })

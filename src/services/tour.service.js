@@ -21,7 +21,7 @@ exports.getOneTourAsync = async (id) => {
 exports.getAllTourAsync = async body => {
     try {
         const { skip, limit } = body;
-    
+
         const tour = await TOUR.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour',
@@ -41,7 +41,7 @@ exports.getAllTourWithDeletedAsync = async body => {
     try {
         const { name, skip, limit } = body;
         var nameRegex = new RegExp(name);
-        const tour = await TOUR.findWithDeleted({ name: { $regex: nameRegex, $options: 'i' }}).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        const tour = await TOUR.findWithDeleted({ name: { $regex: nameRegex, $options: 'i' } }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour With Deleted',
             success: true,
@@ -152,19 +152,16 @@ exports.findTourByNameAsync = async (body) => {
         var tour = [];
         var nameRegex = new RegExp(body.name);
         console.log(body.category);
-        if(body.name =='')
-        {
+        if (body.name == '') {
             tour = await TOUR.find({ category: body.category }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
         }
-        if(body.category =='')
-        {
-            tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' }}).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit)); 
+        if (body.category == '') {
+            tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' } }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
         }
-        if(body.category !='' && body.name !='')
-        { 
+        if (body.category != '' && body.name != '') {
             tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' }, category: body.category }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
         }
-       
+
 
         console.log(tour.length)
         if (tour.length == 0) {
@@ -234,9 +231,42 @@ exports.findAllTourByCategoryAsync = async (category) => {
     }
 };
 
+exports.findTourByTotalDatesAsync = async (totaldates) => {
+    try {
+        const tours = await TOUR.find();
+        var data = [];
+        tours.forEach(tour => {
+            var numbers = [];
+            tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+            var maxInNumbers = Math.max.apply(Math, numbers);
+            if (totaldates >= maxInNumbers) {
+                data.push(tour);
+            }
+        });
+
+        if (data.length == 0) {
+            return {
+                message: 'Dont find tour',
+                success: true,
+            };
+        }
+        return {
+            message: 'Successfully Get List Tour By Total Dates',
+            success: true,
+            data: data
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
 exports.getPageNumbersAsync = async (body) => {
     try {
-        const {limit} = body;
+        const { limit } = body;
         const tour = await TOUR.find();
         var pages = Math.ceil(tour.length / Number(limit));
         if (tour.length == 0) {

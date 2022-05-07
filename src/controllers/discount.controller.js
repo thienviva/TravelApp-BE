@@ -55,12 +55,13 @@ exports.getAllDiscountAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.getAllDiscountByEXPAsync = async (req, res, next) => {
 	try {
 		let query = {
-            limit: req.query.limit || '15',
-            skip: req.query.skip || '1',
-        };
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
 		const resServices = await DiscountServices.getAllDiscountByEXPAsync(query);
 		if (resServices.success) {
 			return controller.sendSuccess(
@@ -82,6 +83,7 @@ exports.getAllDiscountByEXPAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.getDiscountOfTourAsync = async (req, res, next) => {
 	try {
 		const resServices = await DiscountServices.getDiscountOfTourAsync(req.body.idTour);
@@ -105,16 +107,17 @@ exports.getDiscountOfTourAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.createDiscountAsync = async (req, res, next) => {
 	try {
 		const tour = await TOUR.findOne({ _id: req.value.body.idTour });
 		if (tour == null) {
 			return controller.sendSuccess(
-                res,
-                null,
-                404,
-                'Tour does not exist'
-            );
+				res,
+				null,
+				404,
+				'Tour does not exist'
+			);
 		}
 		const resServices = await DiscountServices.createDiscountAsync(req.value.body);
 		if (resServices.success) {
@@ -137,6 +140,7 @@ exports.createDiscountAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.updateDiscountAsync = async (req, res, next) => {
 	try {
 		if (req.body.idTour != null) {
@@ -195,7 +199,6 @@ exports.deleteDiscountAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
-
 
 exports.deleteForceDiscountAsync = async (req, res, next) => {
 	try {

@@ -30,6 +30,7 @@ exports.getOneHotelRoomAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getAllHotelRoomAsync = async (req, res, next) => {
     try {
         const resServices = await hotelroomServices.getAllHotelRoomAsync();
@@ -53,6 +54,7 @@ exports.getAllHotelRoomAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getRoomOfEnterpriseAsync = async (req, res, next) => {
     try {
         const resServices = await hotelroomServices.getRoomOfEnterpriseAsync(req.query.idEnterprise);
@@ -76,6 +78,7 @@ exports.getRoomOfEnterpriseAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.createHotelRoomAsync = async (req, res, next) => {
     try {
         const enterprise = await ENTERPRISE.findOne({ _id: req.value.body.idEnterprise });
@@ -116,6 +119,7 @@ exports.createHotelRoomAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.updateHotelRoomAsync = async (req, res, next) => {
     try {
         if (req.body.idEnterprise != null) {
@@ -182,7 +186,6 @@ exports.deleteHotelRoomAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
-
 
 exports.deleteForceHotelRoomAsync = async (req, res, next) => {
     try {

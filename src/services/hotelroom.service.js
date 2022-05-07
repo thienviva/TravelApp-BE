@@ -16,6 +16,7 @@ exports.getOneHotelRoomAsync = async (id) => {
         };
     }
 };
+
 exports.getAllHotelRoomAsync = async () => {
     try {
         const hotelroom = await HOTELROOM.find();
@@ -32,6 +33,7 @@ exports.getAllHotelRoomAsync = async () => {
         };
     }
 };
+
 exports.getRoomOfEnterpriseAsync = async (idEnterprise) => {
     try {
         const hotelroom = await HOTELROOM.find({ idEnterprise: idEnterprise });
@@ -48,6 +50,7 @@ exports.getRoomOfEnterpriseAsync = async (idEnterprise) => {
         };
     }
 };
+
 exports.createHotelRoomAsync = async body => {
     try {
         const hotelroom = new HOTELROOM(body);
@@ -66,6 +69,7 @@ exports.createHotelRoomAsync = async body => {
         };
     }
 };
+
 exports.updateHotelRoomAsync = async (id, body) => {
     try {
         const hotelroom = await HOTELROOM.findOneAndUpdate(
@@ -87,13 +91,13 @@ exports.updateHotelRoomAsync = async (id, body) => {
         };
     }
 };
+
 exports.deleteHotelRoomAsync = async (id) => {
     try {
         const hotelroom = await HOTELROOM.delete({ _id: id });
         return {
             message: 'Successfully Delete HotelRoom',
             success: true,
-        
         };
     } catch (e) {
         console.log(e);
@@ -104,14 +108,12 @@ exports.deleteHotelRoomAsync = async (id) => {
     }
 };
 
-
 exports.deleteForceHotelRoomAsync = async (id) => {
     try {
         const hotelroom = await HOTELROOM.deleteOne({ _id: id });
         return {
             message: 'Successfully Delete forever HotelRoom',
             success: true,
-        
         };
     } catch (e) {
         console.log(e);

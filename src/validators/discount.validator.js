@@ -5,7 +5,7 @@ const schemas = {
         code: joi.string().required(),
         discount: joi.number().required(),
         startDiscount: joi.date(),
-		endDiscount: joi.date(),
+        endDiscount: joi.date(),
     }),
 };
 module.exports = schemas;

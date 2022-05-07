@@ -26,7 +26,6 @@ exports.getOneUserAsync = async (id) => {
 exports.getAllUserAsync = async body => {
     try {
         const { skip, limit } = body;
-        
         const user = await USER.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All User',

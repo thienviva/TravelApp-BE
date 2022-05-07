@@ -377,8 +377,7 @@ exports.paymentPayPal = async (req, res, next) => {
         });
 
         var discount = await DISCOUNT.findOne({ _id: idDiscount });
-        if(discount != null)
-        {
+        if (discount != null) {
           var used = discount.used;
           used.push(idUser);
           var usedDiscount = await DISCOUNT.findOneAndUpdate(
@@ -467,8 +466,7 @@ exports.paymentVNPay = async (req, res, next) => {
 
     console.log(idDiscount);
     var discount = await DISCOUNT.findOne({ _id: idDiscount });
-    if(discount != null)
-    {
+    if (discount != null) {
       var used = discount.used;
       used.push(idUser);
       var usedDiscount = await DISCOUNT.findOneAndUpdate(

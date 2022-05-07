@@ -354,6 +354,30 @@ exports.findAllTourByCategoryAsync = async (req, res, next) => {
 	}
 };
 
+exports.findTourByTotalDatesAsync = async (req, res, next) => {
+	try {
+		const resServices = await tourServices.findTourByTotalDatesAsync(req.query.totaldates);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
 exports.getPageNumbersAsync = async (req, res, next) => {
 	try {
 		let query = {

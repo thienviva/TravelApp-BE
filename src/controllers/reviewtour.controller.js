@@ -5,7 +5,7 @@ const {
     defaultBookTour,
     defaultStatusPayment,
     defaultPayment,
-  } = require("../config/defineModel");
+} = require("../config/defineModel");
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
@@ -37,6 +37,7 @@ exports.getOneReviewTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getAllReviewTourAsync = async (req, res, next) => {
     try {
         const resServices = await reviewtourServices.getAllReviewTourAsync();
@@ -60,6 +61,7 @@ exports.getAllReviewTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getReviewOfTourAsync = async (req, res, next) => {
     try {
         const resServices = await reviewtourServices.getReviewOfTourAsync(req.query.idTour);
@@ -83,6 +85,7 @@ exports.getReviewOfTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.createReviewTourAsync = async (req, res, next) => {
     try {
         const { decodeToken } = req.value.body;
@@ -97,7 +100,7 @@ exports.createReviewTourAsync = async (req, res, next) => {
                 'Tour does not exist'
             );
         }
-        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: req.value.body.idTour, status: defaultBookTour.COMPLETE});
+        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: req.value.body.idTour, status: defaultBookTour.COMPLETE });
         if (booktour == null) {
             return controller.sendSuccess(res, null, 404, "BookTour does not exist");
         }
@@ -133,6 +136,7 @@ exports.createReviewTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.updateReviewTourAsync = async (req, res, next) => {
     try {
         const { decodeToken } = req.value.body;
@@ -223,7 +227,6 @@ exports.deleteReviewTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
-
 
 exports.deleteForceReviewTourAsync = async (req, res, next) => {
     try {

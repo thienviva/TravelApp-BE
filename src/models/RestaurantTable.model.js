@@ -5,15 +5,15 @@ const mongooseDelete = require("mongoose-delete");
 
 
 const RestaurantTable = new Schema({
-    idEnterprise:defaultModel.stringR,
-    name:defaultModel.stringR,
-    size:defaultModel.number,
-    floor:defaultModel.string,
-    detail:defaultModel.string,
-    price:defaultModel.number,
-    checkIn:defaultModel.date,
-    checkOut:defaultModel.date,
-    status:defaultModel.number
+    idEnterprise: defaultModel.stringR,
+    name: defaultModel.stringR,
+    size: defaultModel.number,
+    floor: defaultModel.string,
+    detail: defaultModel.string,
+    price: defaultModel.number,
+    checkIn: defaultModel.date,
+    checkOut: defaultModel.date,
+    status: defaultModel.number
 }, { timestamps: true })
 
 

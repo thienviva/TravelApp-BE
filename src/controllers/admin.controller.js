@@ -108,9 +108,9 @@ exports.createUserAsync = async (req, res, next) => {
             to: resServices.email,
             from: configEnv.Email,
             subject: 'Tài khoản Travel Around',
-            text: 'Bạn được cung cấp tài khoản để sử dụng ứng dụng Travel Around của chúng tôi:\n'+ 
-            'Tài khoản:' + req.value.body.email + "\n"+
-            'Mật khẩu' + req.value.body.password,
+            text: 'Bạn được cung cấp tài khoản để sử dụng ứng dụng Travel Around của chúng tôi:\n' +
+                'Tài khoản:' + req.value.body.email + "\n" +
+                'Mật khẩu' + req.value.body.password,
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
             if (error) {

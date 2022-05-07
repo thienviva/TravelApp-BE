@@ -34,10 +34,6 @@ router.use('/admin', adminRoute)
 router.use('/statistic', statisticRoute)
 router.use('/chat', chatRoute);
 
-
-
-
-
 router.get('/healCheckw', (req, res) => res.status(200).send('Welcome to TravelAround'))
 
 module.exports = router

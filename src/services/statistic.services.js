@@ -29,8 +29,7 @@ exports.statisticByData = async () => {
             cancel: listCANCEL
         }
         var timelinebooktour = [];
-        for(let i = 0; i < listbooktour.length; i++)
-        {
+        for (let i = 0; i < listbooktour.length; i++) {
             var itemtour = await TOUR.findOne({ _id: listbooktour[i].idTour });
             var result = {
                 booktour: listbooktour[i],
@@ -44,19 +43,10 @@ exports.statisticByData = async () => {
             var result = {
                 idtour: listtour[i]._id,
                 countbooktour: bt,
-                nameTour:listtour[i].name
+                nameTour: listtour[i].name
             };
             statistictour.push(result);
         }
-        // var placetour = []
-        // for (let i = 0; i < listtour.length; i++) {
-        //     var place = await TOUR.countDocuments({ place: listtour[i].place });
-        //     var result = {
-        //         place: listtour[i].place,
-        //         count: place
-        //     };
-        //     placetour.push(result);
-        // }
         var result = {
             user: listuser,
             tour: tour,
@@ -80,40 +70,40 @@ exports.statisticByData = async () => {
 };
 
 exports.staticByBookTour = async body => {
-	try {
-	const { timeStart, timeEnd} = body;
-    const currentTime = new Date(timeStart);
-    const start = new Date(currentTime.getTime()-7*3600*1000);
-	let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);
-	const end = new Date(new Date(endTimeByDay).getTime()-7*3600*1000);
-    var listBookTour = await BOOKTOUR.find({
-      status: { $in: [defaultBookTour.COMPLETE, defaultBookTour.AWAIT] },
-			createdAt: {
-				$gte: start,
-				$lt: end
-			}
-    });
-    console.log(listBookTour);
-    var totalMoney = 0 ;
-    var totalBookTour = listBookTour.length ;
-    listBookTour.forEach(e => {
-      totalMoney =  e.finalpayment + totalMoney;
-    });
-		var result = {
-			totalBookTour: totalBookTour,
-			totalMoney: totalMoney
-		}
-		return {
-			message: 'Successfully Statistic By Time',
-			success: true,
-			data: result
-		};
-	} catch (err) {
-		console.log(err);
-		return {
-			error: 'Internal Server',
-			success: false
-		};
-	}
+    try {
+        const { timeStart, timeEnd } = body;
+        const currentTime = new Date(timeStart);
+        const start = new Date(currentTime.getTime() - 7 * 3600 * 1000);
+        let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);
+        const end = new Date(new Date(endTimeByDay).getTime() - 7 * 3600 * 1000);
+        var listBookTour = await BOOKTOUR.find({
+            status: { $in: [defaultBookTour.COMPLETE, defaultBookTour.AWAIT] },
+            createdAt: {
+                $gte: start,
+                $lt: end
+            }
+        });
+        console.log(listBookTour);
+        var totalMoney = 0;
+        var totalBookTour = listBookTour.length;
+        listBookTour.forEach(e => {
+            totalMoney = e.finalpayment + totalMoney;
+        });
+        var result = {
+            totalBookTour: totalBookTour,
+            totalMoney: totalMoney
+        }
+        return {
+            message: 'Successfully Statistic By Time',
+            success: true,
+            data: result
+        };
+    } catch (err) {
+        console.log(err);
+        return {
+            error: 'Internal Server',
+            success: false
+        };
+    }
 };
 

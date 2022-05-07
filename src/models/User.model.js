@@ -5,15 +5,15 @@ const mongooseDelete = require("mongoose-delete");
 
 
 const User = new Schema({
-    email:defaultModel.stringR,
-    password:defaultModel.string,
-    role:defaultModel.number,
-    name:defaultModel.string,
-    address:defaultModel.string,
-    phone:defaultModel.string,
-    avatar:defaultModel.stringImage,
+    email: defaultModel.stringR,
+    password: defaultModel.string,
+    role: defaultModel.number,
+    name: defaultModel.string,
+    address: defaultModel.string,
+    phone: defaultModel.string,
+    avatar: defaultModel.stringImage,
     otp: defaultModel.string,
-    fcm:defaultModel.string,
+    fcm: defaultModel.string,
     verify: defaultModel.booleanFalse
 }, { timestamps: true })
 

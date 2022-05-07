@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 
 const UploadFile = new Schema({
-    urlFile:defaultModel.array,
+    urlFile: defaultModel.array,
 }, { timestamps: true })
 
 

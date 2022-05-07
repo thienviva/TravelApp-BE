@@ -36,8 +36,6 @@ exports.init = async () => {
   global.io.on("connection", async (socket) => {
     const header = socket.handshake.query.token;
     const fcm = socket.handshake.query.fcm;
-    console.log("header ne");
-    console.log(header);
     if (!header) {
       io.sockets.sockets[socket.id].disconnect();
     } else {
@@ -78,7 +76,7 @@ exports.init = async () => {
         },
         { new: true }
       );
-      
+
       if (!device) {
         data.fcm = user.fcm;
         data.statusDevice = 1;
