@@ -276,7 +276,8 @@ exports.getUserBookTourByDateAsync = async (id, body) => {
             startDate: {
                 $gte: currentTime,
                 $lt: endTimeByDay
-            }
+            },
+            idUser : id
         });
         if (listBookTour == null) {
             return {
@@ -310,7 +311,6 @@ exports.getUserBookTourByDateAsync = async (id, body) => {
                 data.push(result);
             }
         }
-        console.log(data);
         return {
             message: "Successfully get user BookTour by Date",
             success: true,

@@ -111,8 +111,6 @@ exports.createTourAsync = async (req, res, next) => {
 					'Vehicle does not exist'
 				);
 			}
-			
-		
 		}
 
 		const Image = req.files["ImagesTour"];
