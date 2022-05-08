@@ -15,6 +15,7 @@ const vnpaymentRoute = require('./vnpaymentRoute')
 const adminRoute = require('./adminRouter')
 const statisticRoute = require('./statisticRouter')
 const chatRoute = require('./chatRoute');
+const scheduletourRoute = require('./scheduletourRouter')
 
 const router = express.Router()
 router.use('/user', useRoute)
@@ -33,6 +34,7 @@ router.use('/vnpayment', vnpaymentRoute)
 router.use('/admin', adminRoute)
 router.use('/statistic', statisticRoute)
 router.use('/chat', chatRoute);
+router.use('/scheduletour', scheduletourRoute);
 
 router.get('/healCheckw', (req, res) => res.status(200).send('Welcome to TravelAround'))
 

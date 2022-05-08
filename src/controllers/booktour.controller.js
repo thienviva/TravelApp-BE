@@ -12,6 +12,7 @@ const DISCOUNT = require("../models/Discount.model");
 const paypal = require("paypal-rest-sdk");
 const { paymentMethod, sortObject, paymentMethodDiscount } = require("../helper");
 const { start } = require("repl");
+
 exports.bookTourAsync = async (req, res, next) => {
   try {
     const { decodeToken } = req.value.body;
