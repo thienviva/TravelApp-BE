@@ -115,6 +115,34 @@ exports.createScheduleTourAsync = async (req, res, next) => {
                 'Tour does not exist'
             );
         }
+        
+        var numbers = [];
+        tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+
+        var maxInNumbers = Math.max.apply(Math, numbers);
+
+        var EXP = new Date(req.value.body.EXP);
+        var MFG = new Date(req.value.body.MFG);
+
+        var startDate = new Date(EXP);
+        startDate.setDate(startDate.getDate() + 7);
+
+        var endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + maxInNumbers);
+
+        if(MFG > EXP)
+        {
+            return controller.sendSuccess(
+                res,
+                MFG + " > " + EXP,
+                300,
+                "BAD DATA!"
+            );
+        }
+
+        req.value.body.startDate = startDate;
+        req.value.body.endDate = endDate;
+        
         const resServices = await ScheduleTourServices.createScheduleTourAsync(req.value.body);
         if (resServices.success) {
             return controller.sendSuccess(
@@ -139,17 +167,55 @@ exports.createScheduleTourAsync = async (req, res, next) => {
 
 exports.updateScheduleTourAsync = async (req, res, next) => {
     try {
-        if (req.body.idTour != null) {
-            const tour = await TOUR.findOne({ _id: req.body.idTour });
-            if (tour == null) {
-                return controller.sendSuccess(
-                    res,
-                    null,
-                    404,
-                    'Tour does not exist'
-                );
-            }
+        var ScheduleTour = await SCHEDULETOUR.findOne({
+            _id: req.body.id
+        });
+
+        if (ScheduleTour == null) {
+            return controller.sendSuccess(
+                res,
+                null,
+                404,
+                'Schedule Tour does not exist'
+            );
         }
+        const tour = await TOUR.findOne({ _id: ScheduleTour.idTour });
+        if (tour == null) {
+            return controller.sendSuccess(
+                res,
+                null,
+                404,
+                'Tour does not exist'
+            );
+        }
+
+        var numbers = [];
+        tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+
+        var maxInNumbers = Math.max.apply(Math, numbers);
+
+        var EXP = new Date(req.body.EXP);
+        var MFG = new Date(req.body.MFG);
+
+        var startDate = new Date(EXP);
+        startDate.setDate(startDate.getDate() + 7);
+
+        var endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + maxInNumbers);
+
+        if(MFG > EXP)
+        {
+            return controller.sendSuccess(
+                res,
+                MFG + " > " + EXP,
+                300,
+                "BAD DATA!"
+            );
+        }
+
+        req.body.startDate = startDate;
+        req.body.endDate = endDate;
+
         const resServices = await ScheduleTourServices.updateScheduleTourAsync(req.body.id, req.body);
         if (resServices.success) {
             return controller.sendSuccess(

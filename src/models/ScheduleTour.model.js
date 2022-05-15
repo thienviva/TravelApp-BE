@@ -9,6 +9,8 @@ const ScheduleTour = new Schema({
     status: defaultModel.number,
     startDate: defaultModel.date,
     endDate: defaultModel.date,
+    MFG: defaultModel.date,
+    EXP: defaultModel.date,
     booked: defaultModel.array,
 }, { timestamps: true })
 

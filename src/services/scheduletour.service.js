@@ -24,7 +24,7 @@ exports.getAllScheduleTourByEXPAsync = async body => {
         const currentDate = new Date();
         let startTimeByDay = new Date(currentDate).setHours(00, 00, 00, 000);
         const scheduleTour = await SCHEDULETOUR.find({
-            endDate: {
+            EXP: {
                 $gte: startTimeByDay,
             }
         }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
@@ -38,6 +38,8 @@ exports.getAllScheduleTourByEXPAsync = async body => {
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
+                MFG: scheduleTour[i].MFG,
+                EXP: scheduleTour[i].EXP,
                 status: scheduleTour[i].status,
                 booked: scheduleTour[i].booked,
                 tour: tour,
@@ -72,6 +74,8 @@ exports.getAllScheduleTourAsync = async () => {
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
+                MFG: scheduleTour[i].MFG,
+                EXP: scheduleTour[i].EXP,
                 status: scheduleTour[i].status,
                 booked: scheduleTour[i].booked,
                 tour: tour,
@@ -204,6 +208,8 @@ exports.getAllScheduleTourOfTourByEXPAsync = async (idTour) => {
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
+                MFG: scheduleTour[i].MFG,
+                EXP: scheduleTour[i].EXP,
                 status: scheduleTour[i].status,
                 booked: scheduleTour[i].booked,
                 tour: tour,
