@@ -82,7 +82,7 @@ exports.getAllDiscountAsync = async () => {
             }
             dataDiscount.push(data)
         }
-
+        
         return {
             message: 'Successfully Get All Discount',
             success: true,

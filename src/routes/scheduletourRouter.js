@@ -17,5 +17,6 @@ router.delete('/deleteScheduleTour', jwtServices.verify, checkRole([defaultRoles
 router.delete('/deleteForceScheduleTour', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteForceScheduleTourAsync)
 router.post('/bookedScheduleTour', Controller.bookedScheduleTourAsync)
 router.get('/getScheduleTourOfTourByEXP', Controller.getAllScheduleTourOfTourByEXPAsync)
+router.get('/getBookTourOfScheduleTour', Controller.getAllBookTourOfScheduleAsync)
 
 module.exports = router

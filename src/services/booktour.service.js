@@ -53,7 +53,6 @@ exports.bookTourAsync = async (body) => {
     }
 };
 
-
 exports.rebookTourAsync = async (body) => {
     try {
         const bookTour = await BOOKTOUR.findOneAndUpdate(
@@ -170,7 +169,6 @@ exports.getAllBookTourAsync = async () => {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var user = await USER.findOne({ _id: listBookTour[i].idUser });
                 var result = {
-
                     tour: tour,
                     user: user,
                     status: listBookTour[i].status,

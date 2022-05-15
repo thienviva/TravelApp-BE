@@ -1,9 +1,11 @@
 const SCHEDULETOUR = require('../models/ScheduleTour.model');
 const TOUR = require('../models/Tour.model');
+const BOOKTOUR = require("../models/BookTour.model");
+const USER = require('../models/User.model');
 
 exports.getOneScheduleTourAsync = async (id) => {
     try {
-        const scheduleTour = await DISCOUNT.findById({ _id: id });
+        const scheduleTour = await SCHEDULETOUR.findById({ _id: id });
         return {
             message: 'Successfully Get One Schedule Tour',
             success: true,
@@ -218,6 +220,41 @@ exports.getAllScheduleTourOfTourByEXPAsync = async (idTour) => {
         }
         return {
             message: 'Successfully Get All Schedule Tour Of Tour By EXP',
+            success: true,
+            data: datascheduleTour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.getAllBookTourOfScheduleAsync = async (id) => {
+    try {
+        const scheduleTour = await SCHEDULETOUR.findById({ _id: id });
+        var tour = await TOUR.findOne({ _id: scheduleTour.idTour });
+        var datascheduleTour = [];
+        for (let i = 0; i < scheduleTour.booked.length; i++) {
+            var bookTour = await BOOKTOUR.findOne({_id: scheduleTour.booked[i]});
+            var user = await USER.findOne({ _id: bookTour.idUser });
+            var data = {
+                tour: tour,
+                user: user,
+                status: bookTour.status,
+                idTour: bookTour.idTour,
+                idUser: bookTour.idUser,
+                finalpayment: bookTour.finalpayment,
+                startDate: bookTour.startDate,
+                endDate: bookTour.endDate,
+                _id: bookTour._id,
+            }
+            datascheduleTour.push(data)
+        };
+        return {
+            message: 'Successfully Get All Book Tour Of Schedule Tour',
             success: true,
             data: datascheduleTour
         };
