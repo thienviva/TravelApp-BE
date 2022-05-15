@@ -53,7 +53,6 @@ exports.getAllVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }
 
 exports.getAllVehicleOfTourAsync = async (req, res, next) => {
@@ -121,7 +120,6 @@ exports.createVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }
 
 exports.updateVehicleAsync = async (req, res, next) => {
@@ -158,7 +156,6 @@ exports.updateVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }
 
 
@@ -185,7 +182,6 @@ exports.deleteVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }
 
 
@@ -211,5 +207,4 @@ exports.deleteForceVehicleAsync = async (req, res, next) => {
         console.log(err);
         return controller.sendError(res);
     }
-
 }

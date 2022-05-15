@@ -18,6 +18,7 @@ exports.getOneReviewTourAsync = async (id) => {
     };
   }
 };
+
 exports.getAllReviewTourAsync = async () => {
   try {
     const reviewTour = await REVIEWTOUR.find();
@@ -34,6 +35,7 @@ exports.getAllReviewTourAsync = async () => {
     };
   }
 };
+
 exports.getReviewOfTourAsync = async (idTour) => {
   try {
     const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
@@ -66,6 +68,7 @@ exports.getReviewOfTourAsync = async (idTour) => {
     };
   }
 };
+
 exports.createReviewTourAsync = async (body) => {
   try {
     const reviewTour = new REVIEWTOUR(body);
@@ -103,6 +106,7 @@ exports.createReviewTourAsync = async (body) => {
     };
   }
 };
+
 exports.updateReviewTourAsync = async (id, body) => {
   try {
     const reviewTour = await REVIEWTOUR.findById({ _id: id });
@@ -146,6 +150,7 @@ exports.updateReviewTourAsync = async (id, body) => {
     };
   }
 };
+
 exports.deleteReviewTourAsync = async (id) => {
   try {
     const deleteReviewTour = await REVIEWTOUR.delete({ _id: id });

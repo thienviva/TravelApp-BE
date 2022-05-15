@@ -18,6 +18,7 @@ exports.getOneTourAsync = async (id) => {
         };
     }
 };
+
 exports.getAllTourAsync = async body => {
     try {
         const { skip, limit } = body;
@@ -74,6 +75,7 @@ exports.createTourAsync = async body => {
         };
     }
 };
+
 exports.updateTourAsync = async (id, body) => {
     try {
         const tour = await TOUR.findOneAndUpdate(
@@ -95,6 +97,7 @@ exports.updateTourAsync = async (id, body) => {
         };
     }
 };
+
 exports.deleteTourAsync = async (id) => {
     try {
         const tour = await TOUR.delete({ _id: id });
@@ -129,7 +132,6 @@ exports.restoreTourAsync = async (id) => {
     }
 };
 
-
 exports.deleteForceTourAsync = async (id) => {
     try {
         const tour = await TOUR.deleteOne({ _id: id });
@@ -162,8 +164,6 @@ exports.findTourByNameAsync = async (body) => {
             tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' }, category: body.category }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
         }
 
-
-        console.log(tour.length)
         if (tour.length == 0) {
             return {
                 message: 'Dont find tour',

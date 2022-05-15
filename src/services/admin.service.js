@@ -23,6 +23,7 @@ exports.getOneUserAsync = async (id) => {
         };
     }
 };
+
 exports.getAllUserAsync = async body => {
     try {
         const { skip, limit } = body;
@@ -40,6 +41,7 @@ exports.getAllUserAsync = async body => {
         };
     }
 };
+
 exports.getAllUserWithDeletedAsync = async body => {
     try {
         const { name, skip, limit } = body;
@@ -58,6 +60,7 @@ exports.getAllUserWithDeletedAsync = async body => {
         };
     }
 };
+
 exports.createUserAsync = async body => {
     try {
         const { email, password, phone, name, address, verify } = body;
@@ -100,6 +103,7 @@ exports.createUserAsync = async body => {
         };
     }
 };
+
 exports.updateUserAsync = async (id, body) => {
     try {
         const user = await USER.findOneAndUpdate(
@@ -121,6 +125,7 @@ exports.updateUserAsync = async (id, body) => {
         };
     }
 };
+
 exports.deleteUserAsync = async (id) => {
     try {
         const user = await USER.delete({ _id: id });
@@ -154,7 +159,6 @@ exports.restoreUserAsync = async (id) => {
         };
     }
 };
-
 
 exports.deleteForceUserAsync = async (id) => {
     try {

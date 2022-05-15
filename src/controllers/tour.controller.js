@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
 const ENTERPRISE = require('../models/Enterprise.model');
 const VEHICLE = require('../models/Vehicle.model');
+
 exports.getOneTourAsync = async (req, res, next) => {
 	try {
 		const resServices = await tourServices.getOneTourAsync(req.query.id);
@@ -152,6 +153,7 @@ exports.createTourAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.updateTourAsync = async (req, res, next) => {
 	try {
 		if (req.body.idEnterprise != null) {
@@ -269,7 +271,6 @@ exports.deleteForceTourAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
-
 
 exports.findTourByNameAsync = async (req, res, next) => {
 	try {

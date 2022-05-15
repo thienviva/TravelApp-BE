@@ -17,6 +17,7 @@ exports.getOneEnterpriseAsync = async (id) => {
 		};
 	}
 };
+
 exports.getAllEnterpriseAsync = async () => {
 	try {
 		const enterprise = await ENTERPRISE.find();
@@ -33,6 +34,7 @@ exports.getAllEnterpriseAsync = async () => {
 		};
 	}
 };
+
 exports.createEnterpriseAsync = async body => {
 	try {
 		const enterprise = new ENTERPRISE(body);
@@ -50,6 +52,7 @@ exports.createEnterpriseAsync = async body => {
 		};
 	}
 };
+
 exports.updateEnterpriseAsync = async (id, body) => {
 	try {
 		const enterprise = await ENTERPRISE.findOneAndUpdate(
@@ -70,6 +73,7 @@ exports.updateEnterpriseAsync = async (id, body) => {
 		};
 	}
 };
+
 exports.deleteEnterpriseAsync = async (id) => {
 	try {
 		const enterprise = await ENTERPRISE.delete({ _id: id });
@@ -85,7 +89,6 @@ exports.deleteEnterpriseAsync = async (id) => {
 		};
 	}
 };
-
 
 exports.deleteForceEnterpriseAsync = async (id) => {
 	try {

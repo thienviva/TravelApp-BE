@@ -60,6 +60,7 @@ exports.getAllDiscountByEXPAsync = async body => {
         };
     }
 };
+
 exports.getAllDiscountAsync = async () => {
     try {
         const discount = await DISCOUNT.find();
@@ -95,6 +96,7 @@ exports.getAllDiscountAsync = async () => {
         };
     }
 };
+
 exports.getDiscountOfTourAsync = async (idTour) => {
     try {
         const discount = await DISCOUNT.find({ idTour: idTour });
@@ -111,6 +113,7 @@ exports.getDiscountOfTourAsync = async (idTour) => {
         };
     }
 };
+
 exports.createDiscountAsync = async body => {
     try {
         const discount = new DISCOUNT(body);
@@ -129,6 +132,7 @@ exports.createDiscountAsync = async body => {
         };
     }
 };
+
 exports.updateDiscountAsync = async (id, body) => {
     try {
         const discount = await DISCOUNT.findOneAndUpdate(
@@ -150,6 +154,7 @@ exports.updateDiscountAsync = async (id, body) => {
         };
     }
 };
+
 exports.deleteDiscountAsync = async (id) => {
     try {
         const discount = await DISCOUNT.delete({ _id: id });
@@ -166,7 +171,6 @@ exports.deleteDiscountAsync = async (id) => {
         };
     }
 };
-
 
 exports.deleteForceDiscountAsync = async (id) => {
     try {

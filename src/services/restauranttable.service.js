@@ -16,6 +16,7 @@ exports.getOneRestaurantTableAsync = async (id) => {
         };
     }
 };
+
 exports.getAllRestaurantTableAsync = async () => {
     try {
         const restaurantTable = await TABLE.find();
@@ -32,6 +33,7 @@ exports.getAllRestaurantTableAsync = async () => {
         };
     }
 };
+
 exports.getTableOfEnterpriseAsync = async (idEnterprise) => {
     try {
         const RestaurantTable = await TABLE.find({ idEnterprise: idEnterprise });
@@ -48,6 +50,7 @@ exports.getTableOfEnterpriseAsync = async (idEnterprise) => {
         };
     }
 };
+
 exports.createRestaurantTableAsync = async body => {
     try {
         const restaurantTable = new TABLE(body);
@@ -66,6 +69,7 @@ exports.createRestaurantTableAsync = async body => {
         };
     }
 };
+
 exports.updateRestaurantTableAsync = async (id, body) => {
     try {
         const restaurantTable = await TABLE.findOneAndUpdate(
@@ -87,6 +91,7 @@ exports.updateRestaurantTableAsync = async (id, body) => {
         };
     }
 };
+
 exports.deleteRestaurantTableAsync = async (id) => {
     try {
         const restaurantTable = await TABLE.delete({ _id: id });

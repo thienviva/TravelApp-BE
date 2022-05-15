@@ -3,6 +3,7 @@ const HistoryServices = require("../services/history.service");
 const TourServices = require("../services/tour.service");
 const TOUR = require("../models/Tour.model");
 const HISTORY = require("../models/History.model");
+
 exports.createHistoryAsync = async (req, res, next) => {
   try {
     const { decodeToken } = req.value.body;
@@ -75,7 +76,6 @@ exports.deleteHistoryAsync = async (req, res, next) => {
   }
 };
 
-
 exports.deleteForceHistoryAsync = async (req, res, next) => {
   try {
     const resServices = await HistoryServices.deleteForceHistoryAsync(req.query.id);
@@ -99,7 +99,6 @@ exports.deleteForceHistoryAsync = async (req, res, next) => {
     return controller.sendError(res);
   }
 };
-
 
 exports.getAllHistoryAsync = async (req, res, next) => {
   try {
@@ -125,7 +124,6 @@ exports.getAllHistoryAsync = async (req, res, next) => {
   }
 };
 
-
 exports.getOneHistoryAsync = async (req, res, next) => {
   try {
     const resServices = await HistoryServices.getOneHistoryAsync(req.query.id);
@@ -149,8 +147,6 @@ exports.getOneHistoryAsync = async (req, res, next) => {
     return controller.sendError(res);
   }
 };
-
-
 
 exports.getMyHistoryAsync = async (req, res, next) => {
   try {

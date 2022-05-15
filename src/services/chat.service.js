@@ -18,6 +18,7 @@ exports.createChat = async body => {
 		};
 	}
 };
+
 exports.updateChat = async (body, optional = {}) => {
 	try {
 		const newChat = await CHAT.findOneAndUpdate(
@@ -71,6 +72,7 @@ exports.updateSendByUser = async idUser => {
 		};
 	}
 };
+
 exports.getMessages = async body => {
 	try {
 		const { idRoom, skip, limit } = body;
@@ -95,6 +97,7 @@ exports.getMessages = async body => {
 		};
 	}
 };
+
 exports.getRoomAdmin = async body => {
 	try {
 		const { skip, limit } = body;
