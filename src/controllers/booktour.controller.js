@@ -9,6 +9,7 @@ const TOUR = require("../models/Tour.model");
 const BOOKTOUR = require("../models/BookTour.model");
 const USER = require("../models/User.model");
 const DISCOUNT = require("../models/Discount.model");
+const SCHEDULETOUR = require('../models/ScheduleTour.model');
 const paypal = require("paypal-rest-sdk");
 const { paymentMethod, sortObject, paymentMethodDiscount } = require("../helper");
 const { start } = require("repl");
@@ -75,10 +76,41 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     if (tour == null) {
       return controller.sendSuccess(res, null, 404, "Tour does not exist");
     }
-    // const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour, status: defaultBookTour.AWAIT });
-    // if (booktour != null) {
-    //     return controller.sendSuccess(res, null, 300, "The tour is already booked");
-    // }
+
+    var ScheduleTour = await SCHEDULETOUR.findOne({
+      idTour: req.body.idTour,
+      startDate: req.value.body.startDate
+    });
+
+    if (ScheduleTour == null) {
+      return controller.sendSuccess(
+        res,
+        null,
+        404,
+        'Schedule Tour does not exist'
+      );
+    }
+
+    if (ScheduleTour.booked.length == ScheduleTour.slot) {
+      return controller.sendSuccess(
+        res,
+        null,
+        300,
+        'Schedule Tour is full'
+      );
+    }
+
+    ScheduleTour.booked.forEach(element => {
+      if (element == req.body.idBookTour) {
+        return controller.sendSuccess(
+          res,
+          null,
+          300,
+          'Schedule Tour is already booked'
+        );
+      }
+    });
+
     var discount = await DISCOUNT.findOne({
       code: req.value.body.codediscount,
       idTour: req.value.body.idTour,
@@ -371,6 +403,14 @@ exports.paymentPayPal = async (req, res, next) => {
       if (error) {
         res.status(400).send("Payment Fail");
       } else {
+        var ScheduleTour = await SCHEDULETOUR.findOne({
+          idTour: idTour,
+          startDate: startDate,
+        });
+
+        if (ScheduleTour == null) {
+          res.status(404).send("Schedule Tour does not exist");
+        }
         const booktour = await BOOKTOUR.findOne({
           idUser: idUser,
           idTour: idTour,
@@ -399,10 +439,23 @@ exports.paymentPayPal = async (req, res, next) => {
             },
             { new: true }
           );
+
+          //Thêm booktour vào scheduletour tương ứng
+          var booked = ScheduleTour.booked;
+          booked.push(resultBookTour._id);
+          var body = {
+            idTour: idTour,
+            idBookTour: resultBookTour._id,
+            booked: booked
+          }
+
+          const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
           res.send({
             message: "Success",
             paymentId: paymentId,
             idBookTour: resultBookTour._id,
+            data: resServices.data
           });
         } else {
           var resultBookTour = new BOOKTOUR({
@@ -416,10 +469,24 @@ exports.paymentPayPal = async (req, res, next) => {
             endDate: endDate,
           });
           await resultBookTour.save();
+
+          //Thêm booktour vào scheduletour tương ứng
+          var booked = ScheduleTour.booked;
+          booked.push(resultBookTour._id);
+
+          var body = {
+            idTour: idTour,
+            idBookTour: resultBookTour._id,
+            booked: booked
+          }
+
+          const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
           res.send({
             message: "Success",
             paymentId: paymentId,
             idBookTour: resultBookTour._id,
+            data: resServices.data
           });
         }
       }
@@ -465,7 +532,6 @@ exports.paymentVNPay = async (req, res, next) => {
       status: defaultBookTour.AWAIT,
     });
 
-    console.log(idDiscount);
     var discount = await DISCOUNT.findOne({ _id: idDiscount });
     if (discount != null) {
       var used = discount.used;
@@ -475,6 +541,15 @@ exports.paymentVNPay = async (req, res, next) => {
         { used: used },
         { new: true }
       );
+    }
+
+    var ScheduleTour = await SCHEDULETOUR.findOne({
+      idTour: idTour,
+      startDate: startDate
+    });
+
+    if (ScheduleTour == null) {
+      res.status(404).send("Schedule Tour does not exist");
     }
 
     if (booktour != null) {
@@ -488,10 +563,24 @@ exports.paymentVNPay = async (req, res, next) => {
         },
         { new: true }
       );
+
+      //Thêm booktour vào scheduletour tương ứng
+      var booked = ScheduleTour.booked;
+      booked.push(resultBookTour._id);
+
+      var body = {
+        idTour: idTour,
+        idBookTour: resultBookTour._id,
+        booked: booked
+      }
+
+      const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
       res.send({
         message: "Success",
         paymentId: id,
         idBookTour: resultBookTour._id,
+        data: resServices.data
       });
     } else {
       var resultBookTour = new BOOKTOUR({
@@ -505,10 +594,23 @@ exports.paymentVNPay = async (req, res, next) => {
         endDate: endDate,
       });
       await resultBookTour.save();
+
+      //Thêm booktour vào scheduletour tương ứng
+      var booked = ScheduleTour.booked;
+      booked.push(resultBookTour._id);
+
+      var body = {
+        idTour: idTour,
+        idBookTour: resultBookTour._id,
+        booked: booked
+      }
+
+      const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
       res.send({
         message: "Success",
         paymentId: id,
         idBookTour: resultBookTour._id,
+        data: resServices.data
       });
     }
   } else {
@@ -572,7 +674,35 @@ exports.cancelBookTourAsync = async (req, res, next) => {
       );
     }
 
+    //Xóa booktour khỏi scheduletour
+    var ScheduleTour = await SCHEDULETOUR.findOne({
+      idTour: booktour.idTour,
+      startDate: booktour.startDate
+    });
+
+    if (ScheduleTour == null) {
+      return controller.sendSuccess(
+        res,
+        null,
+        404,
+        'Schedule Tour does not exist'
+      );
+    }
+
+    var booked = ScheduleTour.booked;
+    const index = booked.indexOf(req.query.id);
+    if (index != null) {
+      booked.splice(index, 1);
+    }
+    var body = {
+      idTour: booktour.idTour,
+      idBookTour: booktour._id,
+      booked: booked
+    };
+
     const resServices = await bookTourServices.cancelBookTourAsync(req.query.id);
+    const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
     if (resServices.success) {
       return controller.sendSuccess(
         res,
@@ -596,11 +726,43 @@ exports.cancelBookTourAsync = async (req, res, next) => {
 
 exports.deleteBookTourAsync = async (req, res, next) => {
   try {
+    const booktour = await BOOKTOUR.findOne({
+      _id: req.query.id,
+    });
     const resServices = await bookTourServices.deleteBookTourAsync(
       req.query.id
     );
 
     if (resServices.success) {
+
+      //Xóa booktour khỏi scheduletour
+      var ScheduleTour = await SCHEDULETOUR.findOne({
+        idTour: booktour.idTour,
+        startDate: booktour.startDate
+      });
+
+      if (ScheduleTour == null) {
+        return controller.sendSuccess(
+          res,
+          null,
+          404,
+          'Schedule Tour does not exist'
+        );
+      }
+
+      var booked = ScheduleTour.booked;
+      const index = booked.indexOf(req.query.id);
+      if (index != null) {
+        booked.splice(index, 1);
+      }
+      var body = {
+        idTour: booktour.idTour,
+        idBookTour: booktour._id,
+        booked: booked
+      };
+
+      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
       return controller.sendSuccess(
         res,
         resServices.data,
@@ -622,11 +784,43 @@ exports.deleteBookTourAsync = async (req, res, next) => {
 
 exports.deleteForceBookTourAsync = async (req, res, next) => {
   try {
+    const booktour = await BOOKTOUR.findOne({
+      _id: req.query.id,
+    });
     const resServices = await bookTourServices.deleteForceBookTourAsync(
       req.query.id
     );
 
     if (resServices.success) {
+
+      //Xóa booktour khỏi scheduletour
+      var ScheduleTour = await SCHEDULETOUR.findOne({
+        idTour: booktour.idTour,
+        startDate: booktour.startDate
+      });
+
+      if (ScheduleTour == null) {
+        return controller.sendSuccess(
+          res,
+          null,
+          404,
+          'Schedule Tour does not exist'
+        );
+      }
+
+      var booked = ScheduleTour.booked;
+      const index = booked.indexOf(req.query.id);
+      if (index != null) {
+        booked.splice(index, 1);
+      }
+      var body = {
+        idTour: booktour.idTour,
+        idBookTour: booktour._id,
+        booked: booked
+      };
+
+      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+
       return controller.sendSuccess(
         res,
         resServices.data,

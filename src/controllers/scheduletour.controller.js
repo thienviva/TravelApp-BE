@@ -115,7 +115,7 @@ exports.createScheduleTourAsync = async (req, res, next) => {
                 'Tour does not exist'
             );
         }
-        
+
         var numbers = [];
         tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
 
@@ -130,8 +130,7 @@ exports.createScheduleTourAsync = async (req, res, next) => {
         var endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + maxInNumbers);
 
-        if(MFG > EXP)
-        {
+        if (MFG > EXP) {
             return controller.sendSuccess(
                 res,
                 MFG + " > " + EXP,
@@ -142,7 +141,7 @@ exports.createScheduleTourAsync = async (req, res, next) => {
 
         req.value.body.startDate = startDate;
         req.value.body.endDate = endDate;
-        
+
         const resServices = await ScheduleTourServices.createScheduleTourAsync(req.value.body);
         if (resServices.success) {
             return controller.sendSuccess(
@@ -203,8 +202,7 @@ exports.updateScheduleTourAsync = async (req, res, next) => {
         var endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + maxInNumbers);
 
-        if(MFG > EXP)
-        {
+        if (MFG > EXP) {
             return controller.sendSuccess(
                 res,
                 MFG + " > " + EXP,
@@ -288,31 +286,29 @@ exports.deleteForceScheduleTourAsync = async (req, res, next) => {
 
 exports.bookedScheduleTourAsync = async (req, res, next) => {
     try {
-        if (req.body.idTour != null) {
-            const tour = await TOUR.findOne({ _id: req.body.idTour });
-            if (tour == null) {
-                return controller.sendSuccess(
-                    res,
-                    null,
-                    404,
-                    'Tour does not exist'
-                );
-            }
+        const tour = await TOUR.findOne({ _id: req.body.idTour });
+        const bookTour = await BOOKTOUR.findOne({ _id: req.body.idBookTour, idTour: req.body.idTour });
+        if (tour == null) {
+            return controller.sendSuccess(
+                res,
+                null,
+                404,
+                'Tour does not exist'
+            );
         }
-        if (req.body.idBookTour != null) {
-            const bookTour = await BOOKTOUR.findOne({ _id: req.body.idBookTour });
-            if (bookTour == null) {
-                return controller.sendSuccess(
-                    res,
-                    null,
-                    404,
-                    'Book Tour does not exist'
-                );
-            }
+
+        if (bookTour == null) {
+            return controller.sendSuccess(
+                res,
+                null,
+                404,
+                'Book Tour does not exist'
+            );
         }
 
         var ScheduleTour = await SCHEDULETOUR.findOne({
-            idTour: req.body.idTour
+            idTour: req.body.idTour,
+            startDate: bookTour.startDate
         });
 
         if (ScheduleTour == null) {

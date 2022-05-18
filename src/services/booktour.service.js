@@ -208,6 +208,7 @@ exports.getUserBookTourAsync = async (id, body) => {
             };
         }
         else {
+            var user = await USER.findOne({ _id: id });
             var data = [];
             for (let i = 0; i < listBookTour.length; i++) {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
@@ -229,6 +230,8 @@ exports.getUserBookTourAsync = async (id, body) => {
                     finalpayment: listBookTour[i].finalpayment,
                     startDate: listBookTour[i].startDate,
                     endDate: listBookTour[i].endDate,
+                    nameUser: user.name,
+                    phoneUser: user.phone
                 };
                 data.push(result);
             }
@@ -284,6 +287,7 @@ exports.getUserBookTourByDateAsync = async (id, body) => {
             };
         }
         else {
+            var user = await USER.findOne({ _id: id });
             var data = [];
             for (let i = 0; i < listBookTour.length; i++) {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
@@ -305,6 +309,8 @@ exports.getUserBookTourByDateAsync = async (id, body) => {
                     finalpayment: listBookTour[i].finalpayment,
                     startDate: listBookTour[i].startDate,
                     endDate: listBookTour[i].endDate,
+                    nameUser: user.name,
+                    phoneUser: user.phone
                 };
                 data.push(result);
             }
