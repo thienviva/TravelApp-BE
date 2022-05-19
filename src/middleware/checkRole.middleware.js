@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken')
 const USER = require('../models/User.model');
-const checkRole = (roles = [])=> async (req, res, next) => {
+const checkRole = (roles = []) => async (req, res, next) => {
   const { decodeToken } = req.value.body;
   const userId = decodeToken.data.id;
   const user = await USER.findById(userId);
-  if(user&&roles.includes(user.role))
-  {
+  if (user && roles.includes(user.role)) {
     next();
     return;
   }
