@@ -1,5 +1,6 @@
 const controller = require("./controller");
 const bookTourServices = require("../services/booktour.service");
+const ScheduleTourServices = require('../services/scheduletour.service');
 const {
   defaultBookTour,
   defaultStatusPayment,
@@ -78,8 +79,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     }
 
     var ScheduleTour = await SCHEDULETOUR.findOne({
-      idTour: req.body.idTour,
-      startDate: req.value.body.startDate
+      idTour: idTour,
+      startDate: new Date(req.value.body.startDate)
     });
 
     if (ScheduleTour == null) {
@@ -118,9 +119,9 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
 
     var numbers = [];
     tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
-    console.log(numbers);
+
     var maxInNumbers = Math.max.apply(Math, numbers);
-    console.log(maxInNumbers)
+
     var startDate = req.value.body.startDate;
     var endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + maxInNumbers);
@@ -139,6 +140,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         var tmnCode = "I9MOQNMX";
         var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
         var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        //var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=$idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
         var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
         var date = new Date();
 
@@ -185,13 +187,6 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         vnp_Params["vnp_SecureHash"] = signed;
         vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
-        // res
-        //   .status(200)
-        //   .json({
-        //     code: "00",
-        //     data: vnpUrl,
-        //     message: "Successfully Create Payment!",
-        //   });
         return controller.sendSuccess(
           res,
           vnpUrl,
@@ -218,7 +213,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var tmnCode = "I9MOQNMX";
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-          // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
+          //var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=$idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}&idDiscount=${discount._id}`;
           var returnUrl = `https://fe-travelapp.vercel.app/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}&idDiscount=${discount._id}`;
 
           var date = new Date();
@@ -267,14 +262,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             .digest("hex");
           vnp_Params["vnp_SecureHash"] = signed;
           vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-          //   res
-          //     .status(200)
-          //     .json({
-          //       code: "00",
-          //       data: vnpUrl,
-          //       message: "Successfully Create Payment!",
-          //     });
-          // }
+
           return controller.sendSuccess(
             res,
             vnpUrl,
@@ -405,7 +393,7 @@ exports.paymentPayPal = async (req, res, next) => {
       } else {
         var ScheduleTour = await SCHEDULETOUR.findOne({
           idTour: idTour,
-          startDate: startDate,
+          startDate: new Date(startDate),
         });
 
         if (ScheduleTour == null) {
@@ -545,7 +533,7 @@ exports.paymentVNPay = async (req, res, next) => {
 
     var ScheduleTour = await SCHEDULETOUR.findOne({
       idTour: idTour,
-      startDate: startDate
+      startDate: new Date(startDate)
     });
 
     if (ScheduleTour == null) {
