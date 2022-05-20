@@ -1,6 +1,6 @@
 const express = require('express')
-const Controller = require('../controllers/Favorite.controller')
-const SchemaValidateFavorite = require("../validators/Favorite.validator")
+const Controller = require('../controllers/favorite.controller')
+const SchemaValidateFavorite = require("../validators/favorite.validator")
 const router = express.Router()
 const Validate = require("../validators")
 const { checkRole } = require('../middleware/checkRole.middleware')
