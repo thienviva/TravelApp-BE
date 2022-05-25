@@ -447,8 +447,8 @@ exports.paymentPayPal = async (req, res, next) => {
           });
         } else {
           var resultBookTour = new BOOKTOUR({
-            idUser: req.query.idUser,
-            idTour: req.query.idTour,
+            idUser: idUser,
+            idTour: idTour,
             finalpayment: price * 23000,
             idPay: paymentId,
             paymentStatus: defaultStatusPayment.paid,
