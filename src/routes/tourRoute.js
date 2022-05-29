@@ -32,5 +32,6 @@ router.get('/findTourByCategory', Controller.findTourByCategoryAsync)
 router.get('/findAllTourByCategory', Controller.findAllTourByCategoryAsync)
 router.get('/findTourByTotalDates', Controller.findTourByTotalDatesAsync)
 router.get('/getPageNumbers', Controller.getPageNumbersAsync)
+router.get('/getUserFarvorite', jwtServices.verify, checkRole([defaultRoles.User]), Controller.getUserFavoriteTourAsync)
 
 module.exports = router

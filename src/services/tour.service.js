@@ -1,6 +1,5 @@
 const TOUR = require('../models/Tour.model');
-const VEHICLE = require('../models/Vehicle.model');
-const ENTERPRISE = require('../models/Enterprise.model');
+const FAVORITE = require('../models/Favorite.model');
 
 exports.getOneTourAsync = async (id) => {
     try {
@@ -288,3 +287,42 @@ exports.getPageNumbersAsync = async (body) => {
         };
     }
 };
+
+exports.getUserFavoriteTourAsync = async (id) => {
+    try {
+        var userFavorite = await FAVORITE.findOne({ idUser: id });
+        if (userFavorite == null) {
+            return {
+                message: "Dont have User Favorite",
+                success: true,
+            };
+        }
+        else {
+            var listIdTour = userFavorite.listtour;
+            let index = userFavorite.listtour.reduce(function (accumulator, element) {
+                accumulator.push(listIdTour.indexOf(element))
+                return accumulator
+            }, []);
+            var result = Array.from(new Set(index));
+            var data = [];
+
+            for (let i = 0; i < result.length; i++) {
+                var tour = await TOUR.findOne({ _id: listIdTour[result[i]] });
+                data.push(tour);
+            }
+
+            return {
+                message: "Successfully get User Favorite Tour",
+                success: true,
+                data: data,
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            message: "An error occurred",
+            success: false,
+        };
+    }
+};
+

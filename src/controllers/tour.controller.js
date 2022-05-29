@@ -405,3 +405,29 @@ exports.getPageNumbersAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
+exports.getUserFavoriteTourAsync = async (req, res, next) => {
+	try {
+	  const { decodeToken } = req.value.body;
+	  const userId = decodeToken.data.id;
+	  const resServices = await tourServices.getUserFavoriteTourAsync(userId);
+	  if (resServices.success) {
+		return controller.sendSuccess(
+		  res,
+		  resServices.data,
+		  200,
+		  resServices.message
+		);
+	  }
+	  return controller.sendSuccess(
+		res,
+		resServices.data,
+		300,
+		resServices.message
+	  );
+	} catch (error) {
+	  // bug
+	  console.log(error);
+	  return controller.sendError(res);
+	}
+  };
