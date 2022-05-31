@@ -42,6 +42,13 @@ exports.accessAsync = async (req, res, next) => {
         {
             arraytour = favorite.listtour;
             arraycategory = favorite.listcategory;
+
+            // Xóa nếu danh sách yêu thích quá 30
+            if(arraytour.length >= 30 || arraycategory >= 30)
+            {
+                arraytour.splice(0, 5);
+                arraycategory.splice(0, 5); 
+            }
             favoriteId = favorite._id;
         }
 

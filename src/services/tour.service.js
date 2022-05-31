@@ -303,11 +303,31 @@ exports.getUserFavoriteTourAsync = async (id) => {
                 accumulator.push(listIdTour.indexOf(element))
                 return accumulator
             }, []);
-            var result = Array.from(new Set(index));
-            var data = [];
 
-            for (let i = 0; i < result.length; i++) {
-                var tour = await TOUR.findOne({ _id: listIdTour[result[i]] });
+            var unduplicated = Array.from(new Set(index));
+            var data = [];
+            var favorites = [];
+
+            for (let i = 0; i < unduplicated.length; i++) {
+                var item;
+                var count = 0;
+                index.forEach(ix => {
+                    if(unduplicated[i] == ix)
+                    {
+                        count++;
+                    }
+                    item = {
+                        index : unduplicated[i],
+                        count : count
+                    };
+                })
+                favorites.push(item);
+            }
+
+            favorites = favorites.sort((a,b) => b.count - a.count);
+            for(let i = 0; i < favorites.length; i++)
+            {
+                var tour = await TOUR.findOne({ _id: listIdTour[favorites[i].index] });
                 data.push(tour);
             }
 
