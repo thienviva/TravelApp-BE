@@ -346,3 +346,45 @@ exports.getUserFavoriteTourAsync = async (id) => {
     }
 };
 
+exports.getUserHistoryAccessAsync = async (id) => {
+    try {
+        var userFavorite = await FAVORITE.findOne({ idUser: id });
+        if (userFavorite == null) {
+            return {
+                message: "Dont have User Favorite",
+                success: true,
+            };
+        }
+        else {
+            var listIdTour = userFavorite.listtour;
+            let index = userFavorite.listtour.reduce(function (accumulator, element) {
+                accumulator.push(listIdTour.indexOf(element))
+                return accumulator
+            }, []);
+
+            var unduplicated = Array.from(new Set(index));
+            console.log(unduplicated);
+            var data = [];
+            var histories = unduplicated.reverse();
+            console.log(histories);
+
+            for(let i = 0; i < histories.length; i++)
+            {
+                var tour = await TOUR.findOne({ _id: listIdTour[histories[i]] });
+                data.push(tour);
+            }
+
+            return {
+                message: "Successfully get User History Access",
+                success: true,
+                data: data,
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            message: "An error occurred",
+            success: false,
+        };
+    }
+};
