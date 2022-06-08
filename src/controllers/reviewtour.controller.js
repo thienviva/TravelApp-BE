@@ -117,6 +117,7 @@ exports.createReviewTourAsync = async (req, res, next) => {
         else if (reviews.length != booktours.length) {
             return controller.sendSuccess(res, null, 404, "Duplicate review tour");
         }
+        
         const Image = req.files["ImagesReview"];
         if (Image != null) {
             var urlImageMain = [];
