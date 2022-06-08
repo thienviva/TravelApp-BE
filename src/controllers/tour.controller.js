@@ -90,7 +90,6 @@ exports.getAllTourWithDeletedAsync = async (req, res, next) => {
 
 exports.createTourAsync = async (req, res, next) => {
 	try {
-		console.log(req.value.body.idEnterprise);
 		const enterprise = await ENTERPRISE.findOne({ _id: req.value.body.idEnterprise });
 		if (enterprise == null) {
 			return controller.sendSuccess(
@@ -124,6 +123,19 @@ exports.createTourAsync = async (req, res, next) => {
 			);
 		}
 		
+		const Pdf = req.files["FilesTour"][0];
+		if (Pdf == null) {
+			return controller.sendSuccess(
+				res,
+				null,
+				404,
+				'Itinerary does not exist'
+			);
+		}
+
+		const urlPdf = await UploadImage(Pdf.filename, "Tours/" + req.value.body.name + "/");
+		req.value.body.itinerary = urlPdf;
+
 		var urlImageMain = [];
 		for (let i = 0; i < Image.length; i++) {
 			var addImage = req.files["ImagesTour"][i];
@@ -132,6 +144,7 @@ exports.createTourAsync = async (req, res, next) => {
 			urlImageMain.push(urlImage);
 		}
 		req.value.body.imagesTour = urlImageMain;
+		
 		const resServices = await tourServices.createTourAsync(req.value.body);
 		if (resServices.success) {
 			return controller.sendSuccess(
@@ -178,6 +191,13 @@ exports.updateTourAsync = async (req, res, next) => {
 			}
 			req.body.imagesTour = urlImageMain;
 		}
+
+		const Pdf = req.files["FilesTour"][0];
+		if (Pdf != null) {
+			const urlPdf = await UploadImage(Pdf.filename, "Tours/" + req.body.name + "/");
+			req.body.itinerary = urlPdf;
+		}
+		
 		const resServices = await tourServices.updateTourAsync(req.body.id, req.body);
 		if (resServices.success) {
 			return controller.sendSuccess(

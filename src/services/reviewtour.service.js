@@ -43,6 +43,7 @@ exports.getReviewOfTourAsync = async (idTour) => {
     for (let i = 0; i < reviewTour.length; i++) {
       var user = await USER.findOne({ _id: reviewTour[i].idUser });
       var data = {
+        id: reviewTour[i]._id,
         star: reviewTour[i].star,
         comment: reviewTour[i].comment,
         imagesReview: reviewTour[i].imagesReview,

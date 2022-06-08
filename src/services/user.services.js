@@ -48,9 +48,10 @@ exports.registerUserAsync = async (body) => {
         otp: otp,
       });
       await newUser.save();
-      const generateToken = await jwtServices.createToken({
+      const generateToken = jwtServices.createToken({
         id: newUser._id,
         role: newUser.role,
+        //expiresIn: '24h' // expires in 24 hours
       });
       return {
         message: "Successfully Register",
@@ -79,9 +80,10 @@ exports.loginwithGoogleAsync = async (body) => {
 
     var generateToken;
     if (user != null) {
-      generateToken = await jwtServices.createToken({
+      generateToken = jwtServices.createToken({
         id: user._id,
         role: user.role,
+        //expiresIn: '24h' // expires in 24 hours
       });
       return {
         message: "Successfully login",
@@ -104,9 +106,10 @@ exports.loginwithGoogleAsync = async (body) => {
       const googleUser = await USER.findOne({
         email: email,
       });
-      generateToken = await jwtServices.createToken({
+      generateToken = jwtServices.createToken({
         id: googleUser._id,
         role: googleUser.role,
+        //expiresIn: '24h' // expires in 24 hours
       });
     }
 
@@ -184,9 +187,10 @@ exports.registerAdminAsync = async (body) => {
       role: defaultRoles.Admin,
     });
     await newUser.save();
-    const generateToken = await jwtServices.createToken({
+    const generateToken = jwtServices.createToken({
       id: newUser._id,
       role: newUser.role,
+      //expiresIn: '24h' // expires in 24 hours
     });
     return {
       message: "Successfully Register Admin",
@@ -233,6 +237,7 @@ exports.loginAsync = async (body) => {
     const generateToken = jwtServices.createToken({
       id: user._id,
       role: user.role,
+      //expiresIn: '24h' // expires in 24 hours
     });
     console.log(generateToken);
 
@@ -288,6 +293,7 @@ exports.loginAdminAsync = async (body) => {
     const generateToken = jwtServices.createToken({
       id: user._id,
       role: user.role,
+      //expiresIn: '24h' // expires in 24 hours
     });
     console.log(generateToken);
 

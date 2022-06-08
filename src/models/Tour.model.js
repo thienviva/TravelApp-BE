@@ -14,6 +14,7 @@ const Tour = new Schema({
     time: defaultModel.string,
     payment: defaultModel.number,
     imagesTour: defaultModel.array,
+    itinerary: defaultModel.string,
     star: defaultModel.number,
     category: defaultModel.number,
     status: defaultModel.number

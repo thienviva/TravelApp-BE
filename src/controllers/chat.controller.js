@@ -1,5 +1,6 @@
 const controller = require('./controller');
 const chatService = require('../services/chat.service');
+
 const getMessages = async (req, res, next) => {
 	try {
 		const query = {

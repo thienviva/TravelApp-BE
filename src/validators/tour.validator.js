@@ -8,6 +8,7 @@ const schemas = {
         detail: joi.string().required(),
         payment: joi.number().required(),
         imagesTour: joi.array(),
+        itinerary: joi.string(),
         category: joi.number(),
         time: joi.string(),
     }),

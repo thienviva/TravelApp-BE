@@ -83,9 +83,10 @@ exports.createUserAsync = async body => {
             verify: verify,
         });
         await newUser.save();
-        const generateToken = await jwtServices.createToken({
+        const generateToken = jwtServices.createToken({
             id: newUser._id,
-            role: newUser.role
+            role: newUser.role,
+            //expiresIn: '24h' // expires in 24 hours
         });
         return {
             message: 'Successfully Create User',

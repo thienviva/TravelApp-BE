@@ -29,14 +29,15 @@ exports.statisticByData = async () => {
             cancel: listCANCEL
         }
         var timelinebooktour = [];
-        for (let i = 0; i < listbooktour.length; i++) {
-            var itemtour = await TOUR.findOne({ _id: listbooktour[i].idTour });
+        listbooktour.forEach(bt => {
+            var itemtour = TOUR.findOne({ _id: bt.idTour });
             var result = {
-                booktour: listbooktour[i],
+                booktour: bt,
                 nameTour: itemtour.name
             };
             timelinebooktour.push(result);
-        }
+        });
+
         var statistictour = [];
         for (let i = 0; i < listtour.length; i++) {
             var bt = await BOOKTOUR.countDocuments({ idTour: listtour[i]._id });
