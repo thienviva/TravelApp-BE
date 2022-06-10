@@ -214,11 +214,14 @@ exports.deleteReviewTourAsync = async (req, res, next) => {
         const userId = decodeToken.data.id;
         const user = await USER.findOne({ _id: userId });
         const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
-        if (user.role != 0 && userId != reviewTour.idUser) {
-            return {
-                message: 'Verify Role Failed',
-                success: false
-            };
+        if (user.role != 1)
+        {
+            if (user.role != 0 && userId != reviewTour.idUser) {
+                return {
+                    message: 'Verify Role Failed',
+                    success: false
+                };
+            }
         }
         const resServices = await reviewtourServices.deleteReviewTourAsync(req.query.id);
         if (resServices.success) {
@@ -248,11 +251,14 @@ exports.deleteForceReviewTourAsync = async (req, res, next) => {
         const userId = decodeToken.data.id;
         const user = await USER.findOne({ _id: userId });
         const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
-        if (user.role != 0 && userId != reviewTour.idUser) {
-            return {
-                message: 'Verify Role Failed',
-                success: false
-            };
+        if (user.role != 1)
+        {
+            if (user.role != 0 && userId != reviewTour.idUser) {
+                return {
+                    message: 'Verify Role Failed',
+                    success: false
+                };
+            }
         }
         const resServices = await reviewtourServices.deleteForceReviewTourAsync(req.query.id);
         if (resServices.success) {
