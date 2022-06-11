@@ -11,6 +11,8 @@ const schemas = {
         itinerary: joi.string(),
         category: joi.number(),
         time: joi.string(),
+        latitude:joi.string(),
+        longtitude: joi.string(),
     }),
 };
 module.exports = schemas;
