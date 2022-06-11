@@ -3,7 +3,7 @@ const tourServices = require('../services/tour.service');
 const { defaultTours } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
-const { UploadImage } = require("../services/uploadFirebase.service");
+const { UploadImage, UploadPdf } = require("../services/uploadFirebase.service");
 const ENTERPRISE = require('../models/Enterprise.model');
 const VEHICLE = require('../models/Vehicle.model');
 
@@ -133,7 +133,7 @@ exports.createTourAsync = async (req, res, next) => {
 			);
 		}
 
-		const urlPdf = await UploadImage(Pdf.filename, "Tours/" + req.value.body.name + "/");
+		const urlPdf = await UploadPdf(Pdf.filename, "Tours/" + req.value.body.name + "/");
 		req.value.body.itinerary = urlPdf;
 
 		var urlImageMain = [];
@@ -194,7 +194,7 @@ exports.updateTourAsync = async (req, res, next) => {
 
 		const Pdf = req.files["FilesTour"][0];
 		if (Pdf != null) {
-			const urlPdf = await UploadImage(Pdf.filename, "Tours/" + req.body.name + "/");
+			const urlPdf = await UploadPdf(Pdf.filename, "Tours/" + req.body.name + "/");
 			req.body.itinerary = urlPdf;
 		}
 		
