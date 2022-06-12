@@ -5,6 +5,7 @@ const schemas = {
         idVehicles: joi.array(),
         name: joi.string().required(),
         place: joi.string().required(),
+        startingplace:joi.string().required(),
         detail: joi.string().required(),
         payment: joi.number().required(),
         imagesTour: joi.array(),
