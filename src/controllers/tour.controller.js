@@ -192,8 +192,8 @@ exports.updateTourAsync = async (req, res, next) => {
 			req.body.imagesTour = urlImageMain;
 		}
 
-		const Pdf = req.files["FilesTour"][0];
-		if (Pdf != null) {
+		if (req.files["FilesTour"] != null) {
+			const Pdf = req.files["FilesTour"][0];
 			const urlPdf = await UploadPdf(Pdf.filename, "Tours/" + req.body.name + "/");
 			req.body.itinerary = urlPdf;
 		}
