@@ -30,7 +30,6 @@ const body = (schema) => {
   };
 }
 
-
 const bodySocket = ((schema, data) => {
   const validatorResult = schema.validate(data)
   if (validatorResult.error) {

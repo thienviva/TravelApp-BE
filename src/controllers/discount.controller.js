@@ -32,6 +32,7 @@ exports.getOneDiscountAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.getAllDiscountAsync = async (req, res, next) => {
 	try {
 		const resServices = await DiscountServices.getAllDiscountAsync();

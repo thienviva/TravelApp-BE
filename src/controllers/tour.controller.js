@@ -477,3 +477,32 @@ exports.getUserFavoriteTourAsync = async (req, res, next) => {
 	  return controller.sendError(res);
 	}
   };
+
+  exports.findTourByDateAsync = async (req, res, next) => {
+	try {
+	  let query = {
+		dateStart: req.query.dateStart || "",
+		dateEnd: req.query.dateEnd || "",
+	  };
+	  const resServices = await tourServices.findTourByDateAsync(query
+	  );
+	  if (resServices.success) {
+		return controller.sendSuccess(
+		  res,
+		  resServices.data,
+		  200,
+		  resServices.message
+		);
+	  }
+	  return controller.sendSuccess(
+		res,
+		resServices.data,
+		300,
+		resServices.message
+	  );
+	} catch (error) {
+	  // bug
+	  console.log(error);
+	  return controller.sendError(res);
+	}
+  };

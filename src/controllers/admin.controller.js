@@ -30,6 +30,7 @@ exports.getOneUserAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.getAllUserAsync = async (req, res, next) => {
     try {
         let query = {
@@ -135,6 +136,7 @@ exports.createUserAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
 exports.updateUserAsync = async (req, res, next) => {
     try {
         const user = await USER.findById({ _id: req.value.body.id });
@@ -234,7 +236,6 @@ exports.deleteForceUserAsync = async (req, res, next) => {
     }
 };
 
-
 exports.findUserByNameAsync = async (req, res, next) => {
     try {
         let query = {
@@ -292,7 +293,6 @@ exports.findUserByRoleAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
-
 
 exports.getPageNumbersAsync = async (req, res, next) => {
     try {

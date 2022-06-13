@@ -1,5 +1,6 @@
 const TOUR = require('../models/Tour.model');
 const FAVORITE = require('../models/Favorite.model');
+const SCHEDULETOUR = require('../models/ScheduleTour.model');
 
 exports.getOneTourAsync = async (id) => {
     try {
@@ -312,21 +313,19 @@ exports.getUserFavoriteTourAsync = async (id) => {
                 var item;
                 var count = 0;
                 index.forEach(ix => {
-                    if(unduplicated[i] == ix)
-                    {
+                    if (unduplicated[i] == ix) {
                         count++;
                     }
                     item = {
-                        index : unduplicated[i],
-                        count : count
+                        index: unduplicated[i],
+                        count: count
                     };
                 })
                 favorites.push(item);
             }
 
-            favorites = favorites.sort((a,b) => b.count - a.count);
-            for(let i = 0; i < favorites.length; i++)
-            {
+            favorites = favorites.sort((a, b) => b.count - a.count);
+            for (let i = 0; i < favorites.length; i++) {
                 var tour = await TOUR.findOne({ _id: listIdTour[favorites[i].index] });
                 data.push(tour);
             }
@@ -363,13 +362,10 @@ exports.getUserHistoryAccessAsync = async (id) => {
             }, []);
 
             var unduplicated = Array.from(new Set(index));
-            console.log(unduplicated);
             var data = [];
             var histories = unduplicated.reverse();
-            console.log(histories);
 
-            for(let i = 0; i < histories.length; i++)
-            {
+            for (let i = 0; i < histories.length; i++) {
                 var tour = await TOUR.findOne({ _id: listIdTour[histories[i]] });
                 data.push(tour);
             }
@@ -380,6 +376,55 @@ exports.getUserHistoryAccessAsync = async (id) => {
                 data: data,
             };
         }
+    } catch (e) {
+        console.log(e);
+        return {
+            message: "An error occurred",
+            success: false,
+        };
+    }
+};
+
+exports.findTourByDateAsync = async (body) => {
+    try {
+        const { dateStart, dateEnd } = body;
+        const currentTime = new Date(dateStart);
+        let endTimeByDay = new Date(dateEnd).setHours(23, 59, 59, 999);
+        var listSchedule = await SCHEDULETOUR.find({
+            startDate: {
+                $gte: currentTime,
+                $lt: endTimeByDay
+            },
+        });
+        if (listSchedule == null) {
+            return {
+                message: "Tour not found",
+                success: true,
+            };
+        }
+        else {
+            var listIdTour = [];
+            listSchedule.forEach((schedule) => {
+                listIdTour.push(schedule.idTour);
+            });
+            let index = listIdTour.reduce(function (accumulator, element) {
+                accumulator.push(listIdTour.indexOf(element))
+                return accumulator
+            }, []);
+
+            var unduplicated = Array.from(new Set(index));
+            var data = [];
+
+            for (let i = 0; i < unduplicated.length; i++) {
+                var tour = await TOUR.findOne({ _id: listIdTour[unduplicated[i]] });
+                data.push(tour);
+            }
+        }
+        return {
+            message: "Successfully get Tour by Date",
+            success: true,
+            data: data,
+        };
     } catch (e) {
         console.log(e);
         return {
