@@ -1,6 +1,6 @@
 const controller = require("./controller");
 const bookTourServices = require("../services/booktour.service");
-const ScheduleTourServices = require('../services/scheduletour.service');
+const ScheduleTourServices = require("../services/scheduletour.service");
 const {
   defaultBookTour,
   defaultStatusPayment,
@@ -10,9 +10,13 @@ const TOUR = require("../models/Tour.model");
 const BOOKTOUR = require("../models/BookTour.model");
 const USER = require("../models/User.model");
 const DISCOUNT = require("../models/Discount.model");
-const SCHEDULETOUR = require('../models/ScheduleTour.model');
+const SCHEDULETOUR = require("../models/ScheduleTour.model");
 const paypal = require("paypal-rest-sdk");
-const { paymentMethod, sortObject, paymentMethodDiscount } = require("../helper");
+const {
+  paymentMethod,
+  sortObject,
+  paymentMethodDiscount,
+} = require("../helper");
 
 exports.bookTourAsync = async (req, res, next) => {
   try {
@@ -25,7 +29,12 @@ exports.bookTourAsync = async (req, res, next) => {
       return controller.sendSuccess(res, null, 404, "Tour does not exist");
     }
     var numbers = [];
-    tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+    tour.time.replace(/(\d[\d\.]*)/g, function (x) {
+      var n = Number(x);
+      if (x == n) {
+        numbers.push(x);
+      }
+    });
     var maxInNumbers = Math.max.apply(Math, numbers);
     var startDate = req.value.body.startDate;
     var endDate = new Date(startDate);
@@ -79,7 +88,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
 
     var ScheduleTour = await SCHEDULETOUR.findOne({
       idTour: idTour,
-      startDate: new Date(req.value.body.startDate)
+      startDate: new Date(req.value.body.startDate),
     });
 
     if (ScheduleTour == null) {
@@ -87,26 +96,21 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         res,
         null,
         404,
-        'Schedule Tour does not exist'
+        "Schedule Tour does not exist"
       );
     }
 
     if (ScheduleTour.booked.length == ScheduleTour.slot) {
-      return controller.sendSuccess(
-        res,
-        null,
-        300,
-        'Schedule Tour is full'
-      );
+      return controller.sendSuccess(res, null, 300, "Schedule Tour is full");
     }
 
-    ScheduleTour.booked.forEach(element => {
+    ScheduleTour.booked.forEach((element) => {
       if (element == req.body.idBookTour) {
         return controller.sendSuccess(
           res,
           null,
           300,
-          'Schedule Tour is already booked'
+          "Schedule Tour is already booked"
         );
       }
     });
@@ -117,7 +121,12 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     });
 
     var numbers = [];
-    tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+    tour.time.replace(/(\d[\d\.]*)/g, function (x) {
+      var n = Number(x);
+      if (x == n) {
+        numbers.push(x);
+      }
+    });
 
     var maxInNumbers = Math.max.apply(Math, numbers);
 
@@ -190,18 +199,32 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           res,
           vnpUrl,
           200,
-          'Successfully Create Payment!'
+          "Successfully Create Payment!"
         );
       } else {
         var today = new Date();
-        if (discount == null || discount.used.includes(userId) || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
+        if (
+          discount == null ||
+          new Date(discount.startDiscount) > new Date(today) ||
+          new Date(today) > new Date(discount.endDiscount)
+        ) {
           return controller.sendSuccess(
             res,
             null,
             404,
             "Code Discount doesn't exist"
           );
-        } else {
+        }
+        else if (discount.used.includes(userId))
+        {
+          return controller.sendSuccess(
+            res,
+            null,
+            404,
+            "Code Discount was used"
+          );
+        }
+         else {
           var finalpayment =
             tour.payment - (tour.payment * discount.discount) / 100;
           var ipAddr =
@@ -266,7 +289,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             res,
             vnpUrl,
             200,
-            'Successfully Create Payment!'
+            "Successfully Create Payment!"
           );
         }
       }
@@ -305,14 +328,30 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           }
         );
       } else {
-        const idDiscount = discount._id;
+        var idDiscount;
+        if(discount!=null){
+          idDiscount = discount._id;
+        }
         var today = new Date();
-        if (discount == null || discount.used.includes(userId) || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
+        if (
+          discount == null ||
+          new Date(discount.startDiscount) > new Date(today) ||
+          new Date(today) > new Date(discount.endDiscount)
+        ) {
           return controller.sendSuccess(
             res,
             null,
             404,
             "Code Discount doesn't exist"
+          );
+        } 
+        else if (discount.used.includes(userId))
+        {
+          return controller.sendSuccess(
+            res,
+            null,
+            404,
+            "Code Discount was used"
           );
         }
         else {
@@ -336,7 +375,6 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
                   if (payment.links[i].rel === "approval_url") {
                     resultPayment = await payment.links[i].href;
                     console.log(resultPayment);
-                    console.log("hello");
                     return controller.sendSuccess(
                       res,
                       resultPayment,
@@ -433,16 +471,20 @@ exports.paymentPayPal = async (req, res, next) => {
           var body = {
             idTour: idTour,
             idBookTour: resultBookTour._id,
-            booked: booked
-          }
+            booked: booked,
+          };
 
-          const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+          const resServices =
+            await ScheduleTourServices.updateScheduleTourAsync(
+              ScheduleTour._id,
+              body
+            );
 
           res.send({
             message: "Success",
             paymentId: paymentId,
             idBookTour: resultBookTour._id,
-            data: resServices.data
+            data: resServices.data,
           });
         } else {
           var resultBookTour = new BOOKTOUR({
@@ -464,16 +506,20 @@ exports.paymentPayPal = async (req, res, next) => {
           var body = {
             idTour: idTour,
             idBookTour: resultBookTour._id,
-            booked: booked
-          }
+            booked: booked,
+          };
 
-          const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+          const resServices =
+            await ScheduleTourServices.updateScheduleTourAsync(
+              ScheduleTour._id,
+              body
+            );
 
           res.send({
             message: "Success",
             paymentId: paymentId,
             idBookTour: resultBookTour._id,
-            data: resServices.data
+            data: resServices.data,
           });
         }
       }
@@ -532,7 +578,7 @@ exports.paymentVNPay = async (req, res, next) => {
 
     var ScheduleTour = await SCHEDULETOUR.findOne({
       idTour: idTour,
-      startDate: new Date(startDate)
+      startDate: new Date(startDate),
     });
 
     if (ScheduleTour == null) {
@@ -558,16 +604,19 @@ exports.paymentVNPay = async (req, res, next) => {
       var body = {
         idTour: idTour,
         idBookTour: resultBookTour._id,
-        booked: booked
-      }
+        booked: booked,
+      };
 
-      const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+      const resServices = await ScheduleTourServices.updateScheduleTourAsync(
+        ScheduleTour._id,
+        body
+      );
 
       res.send({
         message: "Success",
         paymentId: id,
         idBookTour: resultBookTour._id,
-        data: resServices.data
+        data: resServices.data,
       });
     } else {
       var resultBookTour = new BOOKTOUR({
@@ -589,15 +638,18 @@ exports.paymentVNPay = async (req, res, next) => {
       var body = {
         idTour: idTour,
         idBookTour: resultBookTour._id,
-        booked: booked
-      }
+        booked: booked,
+      };
 
-      const resServices = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+      const resServices = await ScheduleTourServices.updateScheduleTourAsync(
+        ScheduleTour._id,
+        body
+      );
       res.send({
         message: "Success",
         paymentId: id,
         idBookTour: resultBookTour._id,
-        data: resServices.data
+        data: resServices.data,
       });
     }
   } else {
@@ -653,18 +705,13 @@ exports.cancelBookTourAsync = async (req, res, next) => {
       _id: req.query.id,
     });
     if (userId != booktour.idUser) {
-      return controller.sendSuccess(
-        res,
-        false,
-        401,
-        'Check Owner Fail!'
-      );
+      return controller.sendSuccess(res, false, 401, "Check Owner Fail!");
     }
 
     //Xóa booktour khỏi scheduletour
     var ScheduleTour = await SCHEDULETOUR.findOne({
       idTour: booktour.idTour,
-      startDate: booktour.startDate
+      startDate: booktour.startDate,
     });
 
     if (ScheduleTour == null) {
@@ -672,7 +719,7 @@ exports.cancelBookTourAsync = async (req, res, next) => {
         res,
         null,
         404,
-        'Schedule Tour does not exist'
+        "Schedule Tour does not exist"
       );
     }
 
@@ -684,11 +731,16 @@ exports.cancelBookTourAsync = async (req, res, next) => {
     var body = {
       idTour: booktour.idTour,
       idBookTour: booktour._id,
-      booked: booked
+      booked: booked,
     };
 
-    const resServices = await bookTourServices.cancelBookTourAsync(req.query.id);
-    const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+    const resServices = await bookTourServices.cancelBookTourAsync(
+      req.query.id
+    );
+    const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(
+      ScheduleTour._id,
+      body
+    );
 
     if (resServices.success) {
       return controller.sendSuccess(
@@ -721,11 +773,10 @@ exports.deleteBookTourAsync = async (req, res, next) => {
     );
 
     if (resServices.success) {
-
       //Xóa booktour khỏi scheduletour
       var ScheduleTour = await SCHEDULETOUR.findOne({
         idTour: booktour.idTour,
-        startDate: booktour.startDate
+        startDate: booktour.startDate,
       });
 
       if (ScheduleTour == null) {
@@ -733,7 +784,7 @@ exports.deleteBookTourAsync = async (req, res, next) => {
           res,
           null,
           404,
-          'Schedule Tour does not exist'
+          "Schedule Tour does not exist"
         );
       }
 
@@ -745,10 +796,13 @@ exports.deleteBookTourAsync = async (req, res, next) => {
       var body = {
         idTour: booktour.idTour,
         idBookTour: booktour._id,
-        booked: booked
+        booked: booked,
       };
 
-      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(
+        ScheduleTour._id,
+        body
+      );
 
       return controller.sendSuccess(
         res,
@@ -779,11 +833,10 @@ exports.deleteForceBookTourAsync = async (req, res, next) => {
     );
 
     if (resServices.success) {
-
       //Xóa booktour khỏi scheduletour
       var ScheduleTour = await SCHEDULETOUR.findOne({
         idTour: booktour.idTour,
-        startDate: booktour.startDate
+        startDate: booktour.startDate,
       });
 
       if (ScheduleTour == null) {
@@ -791,7 +844,7 @@ exports.deleteForceBookTourAsync = async (req, res, next) => {
           res,
           null,
           404,
-          'Schedule Tour does not exist'
+          "Schedule Tour does not exist"
         );
       }
 
@@ -803,10 +856,13 @@ exports.deleteForceBookTourAsync = async (req, res, next) => {
       var body = {
         idTour: booktour.idTour,
         idBookTour: booktour._id,
-        booked: booked
+        booked: booked,
       };
 
-      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(ScheduleTour._id, body);
+      const updateSchedule = await ScheduleTourServices.updateScheduleTourAsync(
+        ScheduleTour._id,
+        body
+      );
 
       return controller.sendSuccess(
         res,
