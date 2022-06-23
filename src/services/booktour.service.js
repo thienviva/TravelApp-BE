@@ -232,7 +232,8 @@ exports.getUserBookTourAsync = async (id, body) => {
                     startDate: listBookTour[i].startDate,
                     endDate: listBookTour[i].endDate,
                     nameUser: user.name,
-                    phoneUser: user.phone
+                    phoneUser: user.phone,
+                    emailUser: user.email
                 };
                 data.push(result);
             }
