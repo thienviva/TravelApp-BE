@@ -91,15 +91,6 @@ exports.createReviewTourAsync = async (req, res, next) => {
         const { decodeToken } = req.value.body;
         const userId = decodeToken.data.id;
         req.value.body.idUser = userId;
-        const tour = await TOUR.findOne({ _id: req.value.body.idTour });
-        if (tour == null) {
-            return controller.sendSuccess(
-                res,
-                null,
-                404,
-                'Tour does not exist'
-            );
-        }
 
         var Filter = require('bad-words'),
         filter = new Filter();
@@ -108,14 +99,26 @@ exports.createReviewTourAsync = async (req, res, next) => {
 
         req.value.body.comment = filter.clean(req.value.body.comment);
 
-        const reviews = await REVIEWTOUR.find({ idUser: userId, idTour: req.value.body.idTour});
-        const booktours = await BOOKTOUR.find({ idUser: userId, idTour: req.value.body.idTour, status: defaultBookTour.COMPLETE });
+        const review = await REVIEWTOUR.findOne({ idUser: userId, idBookTour: req.value.body.idBookTour});
+        const booktour = await BOOKTOUR.findOne({ _id: req.value.body.idBookTour });
 
-        if (booktours == null) {
+        if (booktour == null || booktour.idUser != userId) {
             return controller.sendSuccess(res, null, 404, "BookTour does not exist");
         }
-        else if (reviews.length != booktours.length) {
+        else if (review != null) {
             return controller.sendSuccess(res, null, 404, "Duplicate review tour");
+        }
+
+        var today = new Date();
+        if (booktour.status !=  defaultBookTour.COMPLETE
+            || new Date(today) < new Date(booktour.endDate)
+        ) {
+          return controller.sendSuccess(
+            res,
+            null,
+            404,
+            "BookTour does not complete"
+          );
         }
         
         const Image = req.files["ImagesReview"];
@@ -129,6 +132,8 @@ exports.createReviewTourAsync = async (req, res, next) => {
             }
             req.value.body.imagesReview = urlImageMain;
         }
+        req.value.body.idTour = booktour.idTour;
+        
         const resServices = await reviewtourServices.createReviewTourAsync(req.value.body);
         if (resServices.success) {
             return controller.sendSuccess(

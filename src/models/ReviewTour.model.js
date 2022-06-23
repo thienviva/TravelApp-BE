@@ -7,6 +7,7 @@ const mongooseDelete = require("mongoose-delete");
 const ReviewTour = new Schema({
     idUser: defaultModel.stringR,
     idTour: defaultModel.stringR,
+    idBookTour: defaultModel.stringR,
     star: defaultModel.number,
     comment: defaultModel.string,
     imagesReview: defaultModel.array,

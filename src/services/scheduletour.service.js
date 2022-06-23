@@ -37,6 +37,7 @@ exports.getAllScheduleTourByEXPAsync = async body => {
             var data = {
                 _id: scheduleTour[i]._id,
                 idTour: scheduleTour[i].idTour,
+                nameTour: tour.name,
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
@@ -73,6 +74,7 @@ exports.getAllScheduleTourAsync = async () => {
             var data = {
                 _id: scheduleTour[i]._id,
                 idTour: scheduleTour[i].idTour,
+                nameTour: tour.name,
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
@@ -207,6 +209,7 @@ exports.getAllScheduleTourOfTourByEXPAsync = async (idTour) => {
             var data = {
                 _id: scheduleTour[i]._id,
                 idTour: scheduleTour[i].idTour,
+                nameTour: tour.name,
                 slot: scheduleTour[i].slot,
                 startDate: scheduleTour[i].startDate,
                 endDate: scheduleTour[i].endDate,
@@ -245,6 +248,7 @@ exports.getAllBookTourOfScheduleAsync = async (id) => {
                 user: user,
                 status: bookTour.status,
                 idTour: bookTour.idTour,
+                nameTour: tour.name,
                 idUser: bookTour.idUser,
                 finalpayment: bookTour.finalpayment,
                 startDate: bookTour.startDate,
