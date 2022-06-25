@@ -2,14 +2,32 @@ const SCHEDULETOUR = require('../models/ScheduleTour.model');
 const TOUR = require('../models/Tour.model');
 const BOOKTOUR = require("../models/BookTour.model");
 const USER = require('../models/User.model');
+const { configEnv } = require("../config/index");
+const { sendMail } = require("./sendMail.service");
 
 exports.getOneScheduleTourAsync = async (id) => {
     try {
         const scheduleTour = await SCHEDULETOUR.findById({ _id: id });
+        const tour = await TOUR.findById({ _id: scheduleTour.idTour });
+        var listEmail = [];
+        for (let i = 0; i < scheduleTour.booked.length; i++) {
+            var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] })
+            var user = await USER.findOne({ _id: bookTour.idUser });
+            if (listEmail.indexOf(user.email) === -1) {
+                listEmail.push(user.email)
+            }
+        }
+
+        var data = {
+            scheduleTour : scheduleTour,
+            listEmail : listEmail,
+            tour: tour
+        }
+
         return {
             message: 'Successfully Get One Schedule Tour',
             success: true,
-            data: scheduleTour
+            data: data
         };
     } catch (e) {
         console.log(e);
@@ -162,6 +180,42 @@ exports.updateScheduleTourAsync = async (id, body) => {
 exports.deleteScheduleTourAsync = async (id) => {
     try {
         const scheduleTour = await SCHEDULETOUR.delete({ _id: id });
+        const tour = await TOUR.findById({ _id: scheduleTour.idTour });
+        var listEmail = [];
+        for (let i = 0; i < scheduleTour.booked.length; i++) {
+            var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] })
+            var user = await USER.findOne({ _id: bookTour.idUser });
+            if (listEmail.indexOf(user.email) === -1) {
+                listEmail.push(user.email)
+            }
+        }
+        const startDate = new Date(scheduleTour.startDate);
+        const endDate = new Date(scheduleTour.endDate);
+
+        const mailOptions = {
+            to: listEmail,
+            from: configEnv.Email,
+            subject: "[Travel App] Thông Báo Chuyến Du Lịch Đã Bị HỦY",
+            text: "Tên chuyến đi: " + tour.name + "\n"
+                + "Giá vé: " + tour.payment + "VNĐ" + "\n"
+                + "Điểm xuất phát: " + tour.startingplace + "\n"
+                + "Điểm đến: " + tour.place + "\n"
+                + "Ngày đi: " + startDate.toISOString('vi-VN').slice(0, 10) + "\n"
+                + "Ngày về: " + endDate.toISOString('vi-VN').slice(0, 10) + "\n"
+                + "Lý do: " + "Không đủ số lượng khách quy định" + "\n"
+                + "LƯU Ý: Để được hoàn tiền quý khách vùi lòng chụp ảnh VÉ (Có mã QR) kèm thông tin tài khoản để được hoàn tiền trong thời gian sớm nhất" + "\n"
+                + "Hoặc có thế đến bất kỳ cơ sở nào của chúng tôi" + "\n"
+                + "Chúng tôi vô cùng xin lỗi và mong quý khách hàng thông cảm, xin chân thành cảm ơn.",
+        };
+
+        const resultSendMail = await sendMail(mailOptions);
+        if (!resultSendMail) {
+            return {
+                message: "Send Email Failed",
+                success: false,
+            };
+        }
+
         return {
             message: 'Successfully Delete Schedule Tour',
             success: true,
@@ -179,6 +233,41 @@ exports.deleteScheduleTourAsync = async (id) => {
 exports.deleteForceScheduleTourAsync = async (id) => {
     try {
         const scheduleTour = await SCHEDULETOUR.deleteOne({ _id: id });
+        const tour = await TOUR.findById({ _id: scheduleTour.idTour });
+        var listEmail = [];
+        for (let i = 0; i < scheduleTour.booked.length; i++) {
+            var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] })
+            var user = await USER.findOne({ _id: bookTour.idUser });
+            if (listEmail.indexOf(user.email) === -1) {
+                listEmail.push(user.email)
+            }
+        }
+        const startDate = new Date(scheduleTour.startDate);
+        const endDate = new Date(scheduleTour.endDate);
+
+        const mailOptions = {
+            to: listEmail,
+            from: configEnv.Email,
+            subject: "[Travel App] Thông Báo Chuyến Du Lịch Đã Bị HỦY",
+            text: "Tên chuyến đi: " + tour.name + "\n"
+                + "Giá vé: " + tour.payment + "VNĐ" + "\n"
+                + "Điểm xuất phát: " + tour.startingplace + "\n"
+                + "Điểm đến: " + tour.place + "\n"
+                + "Ngày đi: " + startDate.toISOString('vi-VN').slice(0, 10) + "\n"
+                + "Ngày về: " + endDate.toISOString('vi-VN').slice(0, 10) + "\n"
+                + "Lý do: " + "Không đủ số lượng khách quy định" + "\n"
+                + "LƯU Ý: Để được hoàn tiền quý khách vùi lòng chụp ảnh VÉ (Có mã QR) kèm thông tin tài khoản để được hoàn tiền trong thời gian sớm nhất" + "\n"
+                + "Hoặc có thế đến bất kỳ cơ sở nào của chúng tôi" + "\n"
+                + "Chúng tôi vô cùng xin lỗi và mong quý khách hàng thông cảm, xin chân thành cảm ơn.",
+        };
+
+        const resultSendMail = await sendMail(mailOptions);
+        if (!resultSendMail) {
+            return {
+                message: "Send Email Failed",
+                success: false,
+            };
+        }
         return {
             message: 'Successfully Delete Forever Schedule Tour',
             success: true,
@@ -241,7 +330,7 @@ exports.getAllBookTourOfScheduleAsync = async (id) => {
         var tour = await TOUR.findOne({ _id: scheduleTour.idTour });
         var datascheduleTour = [];
         for (let i = 0; i < scheduleTour.booked.length; i++) {
-            var bookTour = await BOOKTOUR.findOne({_id: scheduleTour.booked[i]});
+            var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] });
             var user = await USER.findOne({ _id: bookTour.idUser });
             var data = {
                 tour: tour,
