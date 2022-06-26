@@ -7,21 +7,30 @@ const { sendMail } = require("./sendMail.service");
 
 exports.getOneScheduleTourAsync = async (id) => {
     try {
+        var data = [];
         const scheduleTour = await SCHEDULETOUR.findById({ _id: id });
-        const tour = await TOUR.findById({ _id: scheduleTour.idTour });
-        var listEmail = [];
-        for (let i = 0; i < scheduleTour.booked.length; i++) {
-            var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] })
-            var user = await USER.findOne({ _id: bookTour.idUser });
-            if (listEmail.indexOf(user.email) === -1) {
-                listEmail.push(user.email)
+        if (scheduleTour != null) {
+            const tour = await TOUR.findById({ _id: scheduleTour.idTour });
+            var listEmail = [];
+            for (let i = 0; i < scheduleTour.booked.length; i++) {
+                var bookTour = await BOOKTOUR.findOne({ _id: scheduleTour.booked[i] })
+                var user = await USER.findOne({ _id: bookTour.idUser });
+                if (listEmail.indexOf(user.email) === -1) {
+                    listEmail.push(user.email)
+                }
+            }
+            data = {
+                scheduleTour: scheduleTour,
+                listEmail: listEmail,
+                tour: tour
             }
         }
-
-        var data = {
-            scheduleTour : scheduleTour,
-            listEmail : listEmail,
-            tour: tour
+        else{
+            return {
+                message: 'Unsuccessfully Get One Schedule Tour',
+                success: false,
+                data: data
+            };
         }
 
         return {
@@ -192,8 +201,7 @@ exports.deleteScheduleTourAsync = async (id) => {
         const startDate = new Date(scheduleTour.startDate);
         const endDate = new Date(scheduleTour.endDate);
 
-        if(listEmail.length > 0)
-        {
+        if (listEmail.length > 0) {
             const mailOptions = {
                 to: listEmail,
                 from: configEnv.Email,
@@ -209,7 +217,7 @@ exports.deleteScheduleTourAsync = async (id) => {
                     + "Hoặc có thế đến bất kỳ cơ sở nào của chúng tôi" + "\n"
                     + "Chúng tôi vô cùng xin lỗi và mong quý khách hàng thông cảm, xin chân thành cảm ơn.",
             };
-    
+
             const resultSendMail = await sendMail(mailOptions);
             if (!resultSendMail) {
                 return {
@@ -248,8 +256,7 @@ exports.deleteForceScheduleTourAsync = async (id) => {
         const startDate = new Date(scheduleTour.startDate);
         const endDate = new Date(scheduleTour.endDate);
 
-        if(listEmail.length > 0)
-        {
+        if (listEmail.length > 0) {
             const mailOptions = {
                 to: listEmail,
                 from: configEnv.Email,
@@ -265,7 +272,7 @@ exports.deleteForceScheduleTourAsync = async (id) => {
                     + "Hoặc có thế đến bất kỳ cơ sở nào của chúng tôi" + "\n"
                     + "Chúng tôi vô cùng xin lỗi và mong quý khách hàng thông cảm, xin chân thành cảm ơn.",
             };
-    
+
             const resultSendMail = await sendMail(mailOptions);
             if (!resultSendMail) {
                 return {
